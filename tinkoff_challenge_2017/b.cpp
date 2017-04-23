@@ -4,7 +4,7 @@
 using namespace std;
 
 
-int n, m, turns = 0;
+int n, m;
 vector<vector<char> > town;
 
 
@@ -17,7 +17,7 @@ void print_town() {
     }
 }
 
-int find_path(int x, int y) {
+int find_path(int x, int y, int turns) {
     if (town[y][x] == 'T') {
         return true;
     }
@@ -28,45 +28,61 @@ int find_path(int x, int y) {
 
     if (x > 0 && (town[y][x - 1] == '.' || town[y][x - 1] == 'T')) {
         if (!((x < m && town[y][x + 1] == 'V') || town[y][x] == 'S' || (x < m && town[y][x + 1] == 'S'))) {
-            ++turns;
-        }
-        if (find_path(x - 1, y)) {
-            return true;
+            if (turns == 2) {
+                return false;
+            } else if (find_path(x - 1, y, turns + 1)) {
+                return true;
+            }
+        } else {
+            if (find_path(x - 1, y, turns)) {
+                return true;
+            }
         }
     }
 
     if (x < m && (town[y][x + 1] == '.' || town[y][x + 1] == 'T')) {
         if (!((x > 0 && town[y][x - 1] == 'V') || town[y][x] == 'S' || (x > 0 && town[y][x - 1] == 'S'))) {
-            ++turns;
-        }
-        if (find_path(x + 1, y)) {
-            return true;
+            if (turns == 2) {
+                return false;
+            } else if (find_path(x + 1, y, turns + 1)) {
+                return true;
+            }
+        } else {
+            if (find_path(x + 1, y, turns)) {
+                return true;
+            }
         }
     }
 
     if (y > 0 && (town[y - 1][x] == '.' || town[y - 1][x] == 'T')) {
         if (!((y < n && town[y + 1][x] == 'V') || town[y][x] == 'S' || (y < n && town[y + 1][x] == 'S'))) {
-            ++turns;
-        }
-        if (find_path(x, y - 1)) {
-            return true;
+            if (turns == 2) {
+                return false;
+            } else if (find_path(x, y - 1, turns + 1)) {
+                return true;
+            }
+        } else {
+            if (find_path(x, y - 1, turns)) {
+                return true;
+            }
         }
     }
 
     if (y < n && (town[y + 1][x] == '.' || town[y + 1][x] == 'T')) {
         if (!((y > 0 && town[y - 1][x] == 'V') || town[y][x] == 'S' || (y > 0 && town[y - 1][x] == 'S'))) {
-            ++turns;
-        }
-        if (find_path(x, y + 1)) {
-            return true;
+            if (turns == 2) {
+                return false;
+            } else if (find_path(x, y + 1, turns + 1)) {
+                return true;
+            }
+        } else {
+            if (find_path(x, y + 1, turns)) {
+                return true;
+            }
         }
     }
 
     town[y][x] = '.';
-
-    if (turns > 0) {
-        --turns;
-    }
 
     return false;
 }
@@ -91,7 +107,7 @@ int main() {
         }
     }
 
-    if (find_path(x_s, y_s) && turns <= 2) {
+    if (find_path(x_s, y_s, 0)) {
         cout << "YES" << endl;
     } else {
         cout << "NO" << endl;
