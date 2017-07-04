@@ -7,54 +7,33 @@ using namespace std;
 
 
 int main() {
-    int ls, lt, ti;
+    int ls, lt;
     string s, t;
 
     vector<int> result;
     vector<int> tresult;
 
-    bool found = false;
-
     cin >> ls >> lt;
     cin >> s >> t;
-
-    int tcount = ls, result_count = ls;
 
     for (size_t k = 0; k < ls; ++k) {
         result.push_back(k);
     }
 
-    for (size_t i = 0; i < lt; ++i) {
-        ti = i;
+    for (size_t i = 0; i < lt - ls + 1; ++i) {
+        tresult.clear();
         for (size_t j = 0; j < ls; ++j) {
-            if (t[i] != s[j]) {
-                if (found) {
-                    tcount += 1;
-                    tresult.push_back(j);
-                }
-            } else {
-                if (!found) {
-                    tcount = j;
-                    found = true;
-                    tresult.clear();
-                    for (size_t k = 0; k < j; ++k) {
-                        tresult.push_back(k);
-                    }
-                }
-            }
-            if (found) {
-                ++i;
+            if (t[i + j] != s[j]) {
+                tresult.push_back(j);
             }
         }
-        i = ti;
-        found = false;
-        if (tcount < result_count) {
-            result_count = tcount;
+
+        if (tresult.size() < result.size()) {
             result = tresult;
         }
     }
 
-    cout << result_count << endl;
+    cout << result.size() << endl;
     for (size_t i = 0; i < result.size(); ++i) {
         cout << result[i] + 1 << ' ';
     }
