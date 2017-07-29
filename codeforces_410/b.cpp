@@ -44,7 +44,7 @@ int main() {
                 rotate(Strings[i].begin(), Strings[i].begin() + 1, Strings[i].end());
             }
         } else {
-            cout << -1 << endl;
+            cout << "-1" << endl;
             return 0;
         }
     }
