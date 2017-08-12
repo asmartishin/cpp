@@ -60,7 +60,7 @@ int main() {
         }
     }
 
-    cout << result << endl;
+    cout << std::setprecision(10) << result << endl;
 
     return 0;
 }
