@@ -1,34 +1,63 @@
 #include <iostream>
+#include <vector>
+#include <cstdlib>
 
 using namespace std;
 
 
-int quickSortPartition(vector<int>& v, int ) {
-    int x =
+int partition2(vector<int> &a, int l, int r) {
+    int x = a[l];
+    int j = l;
+    for (int i = l + 1; i <= r; i++) {
+        if (a[i] <= x) {
+            j++;
+            swap(a[i], a[j]);
+        }
+    }
+    swap(a[l], a[j]);
+    return j;
 }
 
-void quickSortRecursive(vector<int>& v, int l, int r) {
-    if (l < r) {
-        int p = quickSortPartition(v, l, r);
-        quickSortRecursive(v, l, r - 1);
-        quickSortRecursive(v, p + 1, r);
+pair<int, int> partition3(vector<int> &a, int l, int r) {
+    int x = a[l];
+    int b = l + 1;
+    int e = l;
+    for (int i = l + 1; i <= r; i++) {
+        if (a[i] <= x) {
+            e++;
+            swap(a[i], a[e]);
+            if (a[e] < x) {
+                swap(a[b], a[e]);
+                b++;
+            }
+        }
     }
+    swap(a[l], a[b - 1]);
+    return make_pair(b, e);
+}
+
+void randomized_quick_sort(vector<int> &a, int l, int r) {
+    if (l >= r) {
+        return;
+    }
+
+    int k = l + rand() % (r - l + 1);
+    swap(a[l], a[k]);
+    pair<int, int> m = partition3(a, l, r);
+
+    randomized_quick_sort(a, l, m.first - 1);
+    randomized_quick_sort(a, m.second + 1, r);
 }
 
 int main() {
     int n;
-    vector<int> v;
-
-    cout << "Input array: ";
-    while (cin >> n)
-        v.push_back(n);
-
-    for (size_t i = 0; i < v.size(); ++i) {
-        cout << v[i] << ' ';
+    std::cin >> n;
+    vector<int> a(n);
+    for (size_t i = 0; i < a.size(); ++i) {
+        std::cin >> a[i];
     }
-    cout << endl;
-
-    quickSortRecursive(v, 0, v.size() - 1)
-
-    return 0;
+    randomized_quick_sort(a, 0, a.size() - 1);
+    for (size_t i = 0; i < a.size(); ++i) {
+        std::cout << a[i] << ' ';
+    }
 }
