@@ -80,9 +80,8 @@ int main() {
 
                 result = gauss(system);
 
-                for (size_t i = 0; i < n; ++i) {
-                    cout << result[i] << ' ';
-                }
+                cout << "tano: " << x << ' ' << "bere: " << y << ' ' << "tato: " << z << endl;
+                cout << "i: " << result[0] << ' ' << "e: " << result[1] << ' ' << "a: " << result[2] << endl;
                 cout << endl;
             }
         }
