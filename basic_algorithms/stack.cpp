@@ -19,6 +19,14 @@ public:
         top = nullptr;
     }
 
+    ~Stack() {
+        while (top) {
+            Node *ptr = top->next;
+            delete top;
+            top = ptr;
+        }
+    }
+
     void push(int value) {
         Node *ptr = new Node;
         ptr->value = value;
@@ -40,7 +48,7 @@ public:
         }
     }
 
-    void show() {
+    void print() {
         Node *ptr = top;
         while (ptr != nullptr) {
             cout << ptr->value << endl;
@@ -51,11 +59,19 @@ public:
 
 
 int main() {
+    int n, v;
     Stack s;
-    s.push(1);
-    s.push(2);
-    cout << s.pop() << endl;
-    cout << s.pop() << endl;
+
+    cin >> n;
+
+    for (size_t i = 0; i < n; ++i) {
+        cin >> v;
+        s.push(v);
+    }
+
+    cout << endl;
+
+    s.print();
 
     return 0;
 }

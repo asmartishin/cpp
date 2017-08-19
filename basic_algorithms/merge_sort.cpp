@@ -7,6 +7,7 @@ using namespace std;
 
 int min(int x, int y) { return x < y ? x : y; }
 
+
 void mergeSortMerge(vector<int> &v, int l, int m, int r);
 
 
@@ -65,21 +66,17 @@ void mergeSortMerge(vector<int> &v, int l, int m, int r) {
 
 int main() {
     int n;
-    vector<int> v;
 
-    cout << "Input array: ";
-    while (cin >> n)
-        v.push_back(n);
+    cin >> n;
+    vector<int> v(n);
 
-    for (size_t i = 0; i < v.size(); ++i) {
-        cout << v[i] << ' ';
+    for (size_t i = 0; i < n; ++i) {
+        cin >> v[i];
     }
-    cout << endl;
 
 //    mergeSortRecursive(v, 0, v.size() - 1);
     mergeSortIterative(v, v.size());
 
-    cout << "Sorted array: ";
     for (size_t i = 0; i < v.size(); ++i) {
         cout << v[i] << ' ';
     }

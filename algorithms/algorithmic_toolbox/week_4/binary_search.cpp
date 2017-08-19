@@ -22,12 +22,6 @@ int binary_search_recursive(const vector<int> &a, int x, int left, int right) {
 }
 
 
-int binary_search_recursive(const vector<int> &a, int x) {
-    int left = 0, right = (int)a.size() - 1;
-    return binary_search_recursive(a, x, left, right);
-}
-
-
 int binary_search(const vector<int> &a, int x) {
     int left = 0, right = (int)a.size() - 1;
     int center;

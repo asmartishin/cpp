@@ -5,59 +5,68 @@
 using namespace std;
 
 
-int partition2(vector<int> &a, int l, int r) {
-    int x = a[l];
-    int j = l;
+int partition2(vector<int> &v, int l, int r) {
+    int x = v[l];
+    int y = l;
     for (int i = l + 1; i <= r; i++) {
-        if (a[i] <= x) {
-            j++;
-            swap(a[i], a[j]);
+        if (v[i] <= x) {
+            y++;
+            swap(v[i], v[y]);
         }
     }
-    swap(a[l], a[j]);
-    return j;
+    swap(v[l], v[y]);
+
+    return y;
 }
 
-pair<int, int> partition3(vector<int> &a, int l, int r) {
-    int x = a[l];
-    int b = l + 1;
-    int e = l;
+
+pair<int, int> partition3(vector<int> &v, int l, int r) {
+    int x = v[l];
+    int y = l + 1;
+    int z = l;
     for (int i = l + 1; i <= r; i++) {
-        if (a[i] <= x) {
-            e++;
-            swap(a[i], a[e]);
-            if (a[e] < x) {
-                swap(a[b], a[e]);
-                b++;
+        if (v[i] <= x) {
+            z++;
+            swap(v[i], v[z]);
+            if (v[z] < x) {
+                swap(v[y], v[z]);
+                y++;
             }
         }
     }
-    swap(a[l], a[b - 1]);
-    return make_pair(b, e);
+    swap(v[l], v[y - 1]);
+    return make_pair(y, z);
 }
 
-void randomized_quick_sort(vector<int> &a, int l, int r) {
+
+void quickSortRandomized(vector<int> &v, int l, int r) {
     if (l >= r) {
         return;
     }
 
     int k = l + rand() % (r - l + 1);
-    swap(a[l], a[k]);
-    pair<int, int> m = partition3(a, l, r);
+    swap(v[l], v[k]);
 
-    randomized_quick_sort(a, l, m.first - 1);
-    randomized_quick_sort(a, m.second + 1, r);
+    pair<int, int> m = partition3(v, l, r);
+
+    quickSortRandomized(v, l, m.first - 1);
+    quickSortRandomized(v, m.second + 1, r);
 }
+
 
 int main() {
     int n;
-    std::cin >> n;
-    vector<int> a(n);
-    for (size_t i = 0; i < a.size(); ++i) {
-        std::cin >> a[i];
+    cin >> n;
+
+    vector<int> v(n);
+
+    for (size_t i = 0; i < n; ++i) {
+        cin >> v[i];
     }
-    randomized_quick_sort(a, 0, a.size() - 1);
-    for (size_t i = 0; i < a.size(); ++i) {
-        std::cout << a[i] << ' ';
+
+    quickSortRandomized(v, 0, n - 1);
+
+    for (size_t i = 0; i < n; ++i) {
+        std::cout << v[i] << ' ';
     }
 }
