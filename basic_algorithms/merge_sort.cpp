@@ -32,34 +32,31 @@ void mergeSortIterative(vector<int> &v, int n) {
 
 
 void mergeSortMerge(vector<int> &v, int l, int m, int r) {
-    int i = 0, j = 0, k = l;
-    int lp = m - l + 1;
-    int rp = r - m;
+    int lp = 0, rp = 0;
+    vector<int> L, R;
 
-    vector<int> L(lp), R(rp);
-
-    for (size_t i = 0; i < lp; ++i) {
-        L[i] = v[l + i];
-    }
-
-    for (size_t i = 0; i < rp; ++i) {
-        R[i] = v[m + 1 + i];
-    }
-
-    while (i < lp && j < rp) {
-        if (L[i] <= R[j]) {
-            v[k++] = L[i++];
+    for (size_t i = l; i <= r; ++i) {
+        if (i <= m) {
+            L.push_back(v[i]);
         } else {
-            v[k++] = R[j++];
+            R.push_back(v[i]);
         }
     }
 
-    while (i < lp) {
-        v[k++] = L[i++];
+    while (lp < L.size() && rp < R.size()) {
+        if (L[lp] <= R[rp]) {
+            v[l++] = L[lp++];
+        } else {
+            v[l++] = R[rp++];
+        }
     }
 
-    while (j < rp) {
-        v[k++] = R[j++];
+    while (lp < L.size()) {
+        v[l++] = L[lp++];
+    }
+
+    while (rp < R.size()) {
+        v[l++] = R[rp++];
     }
 }
 
