@@ -58,6 +58,7 @@ public:
         }
         cout << endl;
     }
+    
     ~Queue() {
         while (front != nullptr) {
             Node *ptr = front;
