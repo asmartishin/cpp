@@ -4,20 +4,20 @@ using namespace std;
 
 
 template <typename T>
-struct Node {
-    T data;
-    Node<T> *next;
-};
-
-
-template <typename T>
 class Queue {
+
+private:
+    struct Node {
+        T data;
+        Node *next;
+    };
+
 public:
-    Node<T> *front, *back;
+    Node *front, *back;
     Queue() {front = nullptr; back = nullptr;}
 
     void push_back(T data) {
-        Node<T> *ptr = new Node<T>;
+        Node *ptr = new Node;
         ptr->data = data;
         ptr->next = nullptr;
 
@@ -26,7 +26,7 @@ public:
             back = ptr;
         } else {
             back->next = ptr;
-            back=ptr;
+            back = ptr;
         }
     }
 
@@ -35,7 +35,7 @@ public:
             throw runtime_error("Queue is empty");
         }
 
-        Node<T> *ptr = front;
+        Node *ptr = front;
         T data = ptr->data;
 
         if (front == back) {
@@ -50,7 +50,7 @@ public:
     }
 
     void print() {
-        Node<T> *ptr = front;
+        Node *ptr = front;
 
         while (ptr) {
             cout << ptr->data << ' ';
@@ -60,7 +60,7 @@ public:
     }
     ~Queue() {
         while (front != nullptr) {
-            Node<T> *ptr = front;
+            Node *ptr = front;
             front = front->next;
             delete ptr;
         }
