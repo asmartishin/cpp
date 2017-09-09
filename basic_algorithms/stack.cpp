@@ -4,15 +4,13 @@
 using namespace std;
 
 
-struct Node
-{
-    int value;
+struct Node {
+    int data;
     Node *next;
 };
 
 
-class Stack
-{
+class Stack {
     Node *top;
 public:
     Stack() {
@@ -27,9 +25,9 @@ public:
         }
     }
 
-    void push(int value) {
+    void push(int data) {
         Node *ptr = new Node;
-        ptr->value = value;
+        ptr->data = data;
         ptr->next = nullptr;
         if (top != nullptr) {
             ptr->next=top;
@@ -39,10 +37,11 @@ public:
 
     int pop() {
         if (top != nullptr) {
-            int value = top->value;
+            Node *ptr = top;
+            int data = ptr->data;
             top = top->next;
-            delete top;
-            return value;
+            delete ptr;
+            return data;
         } else {
             throw runtime_error("Stack is empty");
         }
@@ -51,7 +50,7 @@ public:
     void print() {
         Node *ptr = top;
         while (ptr != nullptr) {
-            cout << ptr->value << endl;
+            cout << ptr->data << endl;
             ptr = ptr->next;
         }
     }
@@ -59,14 +58,14 @@ public:
 
 
 int main() {
-    int n, v;
+    int n, d;
     Stack s;
 
     cin >> n;
 
     for (size_t i = 0; i < n; ++i) {
-        cin >> v;
-        s.push(v);
+        cin >> d;
+        s.push(d);
     }
 
     cout << endl;

@@ -11,9 +11,9 @@ private:
         T data;
         Node *next;
     };
+    Node *front, *back;
 
 public:
-    Node *front, *back;
     Queue() {front = nullptr; back = nullptr;}
 
     void push_back(T data) {
@@ -58,7 +58,8 @@ public:
         }
         cout << endl;
     }
-    ~Queue() {
+
+    virtual ~Queue() {
         while (front != nullptr) {
             Node *ptr = front;
             front = front->next;
@@ -72,6 +73,7 @@ public:
 int main() {
     int n;
     double d;
+
     Queue<double> q;
 
     cin >> n;

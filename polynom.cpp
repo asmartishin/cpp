@@ -2,8 +2,7 @@
 #include <vector>
 #include <cmath>
 
-template
-<typename T>
+template <typename T>
 class Polynom{
     std::vector<T> coefficients;
 public:
