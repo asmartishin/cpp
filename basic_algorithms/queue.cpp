@@ -2,6 +2,7 @@
 
 using namespace std;
 
+
 template <typename T>
 struct Node {
     T data;
