@@ -38,12 +38,12 @@ int main() {
     map<pair<double, double>, set<int> > lines;
 
     vector<pair<int, int> > points;
-    vector<int> ids;
+    set<int> ids;
 
     for (size_t i = 0; i < n; ++i) {
         cin >> y;
         points.push_back(make_pair(i, y));
-        ids.push_back(i);
+        ids.insert(i);
 
         for (size_t j = 0; j < i; ++j) {
             int x1 = i;
@@ -69,14 +69,8 @@ int main() {
         }
         for(auto it2 = it1; it2 != lines.end(); ++it2) {
             if (it1->first.first != it2->first.first && it1->first.second == it2->first.second) {
-                vector<int> new_ids;
-                for(auto i : it1->second) {
-                    new_ids.push_back(i);
-                }
-                for(auto i : it2->second) {
-                    new_ids.push_back(i);
-                }
-                if (comp_ids(ids, new_ids)) {
+                it1->second.insert(it2->second.begin(), it2->second.end());
+                if (ids == it1->second) {
                     result = true;
                     break;
                 }
