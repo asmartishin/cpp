@@ -59,7 +59,7 @@ public:
         cout << endl;
     }
 
-    virtual ~Queue() {
+    ~Queue() {
         while (front != nullptr) {
             Node *ptr = front;
             front = front->next;
