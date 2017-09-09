@@ -69,8 +69,9 @@ public:
 
 
 int main() {
-    int n, d;
-    Queue<int> q;
+    int n;
+    double d;
+    Queue<double> q;
 
     cin >> n;
 
