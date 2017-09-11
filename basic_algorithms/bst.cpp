@@ -20,6 +20,7 @@ private:
         Node (T data, Node *left = nullptr, Node *right = nullptr)
            : data(data), left(left), right(right) {}
     };
+
     Node *root;
 
     Node* clear(Node *n) {
@@ -98,7 +99,6 @@ private:
         }
     }
 
-
     void inorder(vector<T> &nodes, Node *n) {
         if (n != nullptr) {
             inorder(nodes, n->left);
@@ -106,7 +106,6 @@ private:
             inorder(nodes, n->right);
         }
     }
-
 
 public:
     BST() {
@@ -142,8 +141,6 @@ public:
         }
         return false;
     }
-
-
 };
 
 int main() {
