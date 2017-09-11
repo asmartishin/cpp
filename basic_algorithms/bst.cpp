@@ -44,23 +44,23 @@ private:
         return n;
     }
 
-    Node* findMin(Node *n) {
+    Node* min(Node *n) {
         if (n == nullptr) {
             return nullptr;
         } else if (n->left == nullptr) {
             return n;
         } else {
-            return findMin(n->left);
+            return min(n->left);
         }
     }
 
-    Node* findMax(Node *n) {
+    Node* max(Node *n) {
         if (n == nullptr) {
             return nullptr;
         } else if (n->right == nullptr) {
             return n;
         } else {
-            return findMax(n->right);
+            return max(n->right);
         }
     }
 
@@ -72,7 +72,7 @@ private:
         } else if (data > n->data) {
             n->right = erase(data, n->right);
         } else if (n->left && n->right) {
-            Node *ptr = findMin(n->right);
+            Node *ptr = min(n->right);
             n->data = ptr->data;
             n->right = erase(n->data, n->right);
         } else {
@@ -124,6 +124,20 @@ public:
         root = erase(data, root);
     }
 
+    T min() {
+        if (root == nullptr) {
+            throw runtime_error("Empty BST");
+        }
+        return min(root)->data;
+    }
+
+    T max() {
+        if (root == nullptr) {
+            throw runtime_error("Empty BST");
+        }
+        return max(root)->data;
+    }
+
     void print() {
         vector<T> nodes;
         inorder(nodes, root);
@@ -157,4 +171,5 @@ int main() {
     bst.print();
 
     cout << bst.find(2) << endl;
+    cout << bst.max() << endl;
 }
