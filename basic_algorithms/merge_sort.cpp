@@ -5,9 +5,6 @@
 using namespace std;
 
 
-int min(int x, int y) { return x < y ? x : y; }
-
-
 void mergeSortMerge(vector<int> &v, int l, int m, int r);
 
 
@@ -20,11 +17,12 @@ void mergeSortRecursive(vector<int> &v, int l, int r) {
     }
 }
 
+
 void mergeSortIterative(vector<int> &v, int n) {
     for (size_t c = 1; c <= n - 1; c *= 2) {
         for (size_t l = 0; l < n - 1; l += 2 * c) {
             int m = l + c - 1;
-            int r = min(l + 2 * c - 1, n - 1);
+            int r = min((int)(l + 2 * c - 1), n - 1);
             mergeSortMerge(v, l, m, r);
         }
     }
