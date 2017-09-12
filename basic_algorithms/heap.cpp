@@ -79,7 +79,7 @@ public:
             heap.pop_back();
             heapifyDown(0);
         } catch (const out_of_range& e) {
-            cout << endl << e.what();
+            cout << e.what() << endl;
             throw;
         }
     }
@@ -91,7 +91,7 @@ public:
             }
             return heap[0];
         } catch (const out_of_range& e) {
-            cout << endl << e.what();
+            cout << e.what() << endl;
             throw;
         }
     }
