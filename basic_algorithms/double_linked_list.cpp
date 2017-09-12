@@ -175,5 +175,6 @@ int main() {
 
     dll.insert(3, 2);
     dll.erase(0);
+
     dll.print();
 }
