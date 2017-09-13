@@ -27,7 +27,7 @@ class Heap {
         }
     }
 
-    void shiftDown(int node) {
+    void siftDown(int node) {
         int left = getLeftChild(node);
         int right = getRightChild(node);
 
@@ -41,16 +41,16 @@ class Heap {
 
         if (smallest != node) {
             swap(heap[node], heap[smallest]);
-            shiftDown(smallest);
+            siftDown(smallest);
         }
     }
 
-    void shiftUp(int node) {
+    void siftUp(int node) {
         int parent = getParent(node);
 
         if (node && heap[parent] > heap[node]) {
             swap(heap[node], heap[parent]);
-            shiftUp(parent);
+            siftUp(parent);
         }
     }
 public:
@@ -66,7 +66,7 @@ public:
 
     void push(T value) {
         heap.push_back(value);
-        shiftUp(size() - 1);
+        siftUp(size() - 1);
     }
 
     void pop() {
@@ -77,7 +77,7 @@ public:
 
             heap[0] = heap.back();
             heap.pop_back();
-            shiftDown(0);
+            siftDown(0);
         } catch (const out_of_range& e) {
             cout << e.what() << endl;
             throw;
