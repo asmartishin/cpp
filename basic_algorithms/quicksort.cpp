@@ -1,45 +1,42 @@
 #include <iostream>
 #include <vector>
-#include <cstdlib>
 
 using namespace std;
 
 
-int partition2(vector<int> &v, int l, int r) {
-    int x = v[l];
-    int y = l;
-    for (int i = l + 1; i <= r; i++) {
-        if (v[i] <= x) {
-            y++;
-            swap(v[i], v[y]);
+int partition(vector<int> &v, int l, int r) {
+    int m = l;
+    for (size_t i = l + 1; i <= r; ++i) {
+        if (v[i] <= v[l]) {
+            ++m;
+            swap(v[i], v[m]);
         }
     }
-    swap(v[l], v[y]);
-
-    return y;
+    swap(v[l], v[m]);
+    return m;
 }
 
 
 pair<int, int> partition3(vector<int> &v, int l, int r) {
-    int x = v[l];
-    int y = l + 1;
-    int z = l;
-    for (int i = l + 1; i <= r; i++) {
-        if (v[i] <= x) {
-            z++;
-            swap(v[i], v[z]);
-            if (v[z] < x) {
-                swap(v[y], v[z]);
-                y++;
+    int ml = l + 1;
+    int mr = l;
+
+    for (size_t i = ml; i <= r; ++i) {
+        if (v[i] <= v[l]) {
+            ++mr;
+            swap(v[i], v[mr]);
+            if (v[mr] < v[l]) {
+                swap(v[ml], v[mr]);
+                ++ml;
             }
         }
     }
-    swap(v[l], v[y - 1]);
-    return make_pair(y, z);
+    swap(v[l], v[ml - 1]);
+    return make_pair(ml, mr);
 }
 
 
-void quickSortRandomized(vector<int> &v, int l, int r) {
+void quickSort(vector<int> &v, int l, int r) {
     if (l >= r) {
         return;
     }
@@ -49,13 +46,14 @@ void quickSortRandomized(vector<int> &v, int l, int r) {
 
     pair<int, int> m = partition3(v, l, r);
 
-    quickSortRandomized(v, l, m.first - 1);
-    quickSortRandomized(v, m.second + 1, r);
+    quickSort(v, l, m.first - 1);
+    quickSort(v, m.second + 1, r);
 }
 
 
 int main() {
     int n;
+
     cin >> n;
 
     vector<int> v(n);
@@ -64,9 +62,12 @@ int main() {
         cin >> v[i];
     }
 
-    quickSortRandomized(v, 0, n - 1);
+    quickSort(v, 0, n - 1);
 
     for (size_t i = 0; i < n; ++i) {
-        std::cout << v[i] << ' ';
+        cout << v[i] << ' ';
     }
+    cout << endl;
+
+    return 0;
 }
