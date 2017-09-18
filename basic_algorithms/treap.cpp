@@ -13,55 +13,57 @@ private:
     struct Node {
         T data;
         int priority;
-        shared_ptr<Node> left, right;
+        unique_ptr<Node> left, right;
 
         Node() {
-            left = right = nullptr;
+            left = nullptr;
+            right = nullptr;
         }
 
         Node(T&& data) {
             this->data = move(data);
             priority = rand() % PRIORITY_POOL;
-            left = right = nullptr;
+            left = nullptr;
+            right = nullptr;
         }
     };
 
-    shared_ptr<Node> root;
+    unique_ptr<Node> root;
 
-    shared_ptr<Node> rightRotate(shared_ptr<Node> &node) {
-        shared_ptr<Node> left_child = move(node->left);
+    unique_ptr<Node> rightRotate(unique_ptr<Node> &node) {
+        unique_ptr<Node> left_child = move(node->left);
         node->left = move(left_child->right);
-        left_child->right = node;
-        return left_child;
+        left_child->right = move(node);
+        return move(left_child);
     }
 
-    shared_ptr<Node> leftRotate(shared_ptr<Node> &node) {
-        shared_ptr<Node> right_child = node->right;
-        node->right = right_child->left;
-        right_child->left = node;
-        return right_child;
+    unique_ptr<Node> leftRotate(unique_ptr<Node> &node) {
+        unique_ptr<Node> right_child = move(node->right);
+        node->right = move(right_child->left);
+        right_child->left = move(node);
+        return move(right_child);
     }
 
-    shared_ptr<Node> insert(shared_ptr<Node> &node, T data) {
+    unique_ptr<Node> insert(unique_ptr<Node> &node, T data) {
         if (!node)
-            return make_shared<Node>(move(data));
+            return make_unique<Node>(move(data));
 
         if (data < node->data) {
             node->left = insert(node->left, data);
 
             if (node->left->priority > node->priority)
-                node = rightRotate(node);
+                node = move(rightRotate(node));
         } else {
             node->right = insert(node->right, data);
 
             if (node->right->priority > node->priority)
-                node = leftRotate(node);
+                node = move(leftRotate(node));
         }
 
-        return node;
+        return move(node);
     }
 
-    shared_ptr<Node> erase(shared_ptr<Node> &node, T data) {
+    unique_ptr<Node> erase(unique_ptr<Node> &node, T data) {
         if (!node)
             return move(node);
 
@@ -70,21 +72,21 @@ private:
         else if (data > node->data)
             node->right = erase(node->right, data);
         else if (!node->left) {
-            node = node->right;
+            node = move(node->right);
         } else if (!node->right) {
-            node = node->left;
+            node = move(node->left);
         } else if (node->left->priority < node->right->priority){
-            node = leftRotate(node);
+            node = move(leftRotate(node));
             node->left = erase(node->left, data);
         } else {
-            node = rightRotate(node);
+            node = move(rightRotate(node));
             node->right = erase(node->right, data);
         }
 
-        return node;
+        return move(node);
     }
 
-    shared_ptr<Node> find(shared_ptr<Node> &node, T data) {
+    unique_ptr<Node> find(unique_ptr<Node> &node, T data) {
         if (!node)
             return nullptr;
         else if (data < node->data)
@@ -92,10 +94,10 @@ private:
         else if (data > node->data)
             return find(node->right, data);
 
-        return node;
+        return move(node);
     }
 
-    void inorder(shared_ptr<Node> &node, vector<pair<T, int> > &nodes) {
+    void inorder(unique_ptr<Node> &node, vector<pair<T, int> > &nodes) {
         if (node) {
             inorder(node->left, nodes);
             nodes.push_back(make_pair(node->data, node->priority));
