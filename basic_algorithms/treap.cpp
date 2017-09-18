@@ -8,51 +8,43 @@ using namespace std;
 template <typename T>
 class Treap {
 private:
+    static const int PRIORITY_POOL = 100;
+
     struct Node {
         T data;
         int priority;
-        Node *left, *right;
+        shared_ptr<Node> left, right;
 
         Node() {
             left = right = nullptr;
         }
 
-        Node(T data) {
-            this->data = data;
-            priority = rand() % 100;
+        Node(T&& data) {
+            this->data = move(data);
+            priority = rand() % PRIORITY_POOL;
             left = right = nullptr;
         }
     };
 
-    Node *root;
+    shared_ptr<Node> root;
 
-    Node* clear(Node *node) {
-        if (!node) {
-            return nullptr;
-        }
-
-        clear(node->left);
-        clear(node->right);
-        return nullptr;
-    }
-
-    Node* rightRotate(Node *node) {
-        Node *left_child = node->left;
-        node->left = left_child->right;
+    shared_ptr<Node> rightRotate(shared_ptr<Node> &node) {
+        shared_ptr<Node> left_child = move(node->left);
+        node->left = move(left_child->right);
         left_child->right = node;
         return left_child;
     }
 
-    Node* leftRotate(Node *node) {
-        Node *right_child = node->right;
+    shared_ptr<Node> leftRotate(shared_ptr<Node> &node) {
+        shared_ptr<Node> right_child = node->right;
         node->right = right_child->left;
         right_child->left = node;
         return right_child;
     }
 
-    Node* insert(Node *node, T data) {
+    shared_ptr<Node> insert(shared_ptr<Node> &node, T data) {
         if (!node)
-            return new Node(data);
+            return make_shared<Node>(move(data));
 
         if (data < node->data) {
             node->left = insert(node->left, data);
@@ -69,22 +61,18 @@ private:
         return node;
     }
 
-    Node* erase(Node *node, T data) {
+    shared_ptr<Node> erase(shared_ptr<Node> &node, T data) {
         if (!node)
-            return node;
+            return move(node);
 
         if (data < node->data)
             node->left = erase(node->left, data);
         else if (data > node->data)
             node->right = erase(node->right, data);
         else if (!node->left) {
-            Node *right_child = node->right;
-            delete(node);
-            node = right_child;
+            node = node->right;
         } else if (!node->right) {
-            Node *left_child = node->left;
-            delete(node);
-            node = left_child;
+            node = node->left;
         } else if (node->left->priority < node->right->priority){
             node = leftRotate(node);
             node->left = erase(node->left, data);
@@ -96,7 +84,7 @@ private:
         return node;
     }
 
-    Node* find(Node *node, T data) {
+    shared_ptr<Node> find(shared_ptr<Node> &node, T data) {
         if (!node)
             return nullptr;
         else if (data < node->data)
@@ -107,7 +95,7 @@ private:
         return node;
     }
 
-    void inorder(Node *node, vector<pair<T, int> > &nodes) {
+    void inorder(shared_ptr<Node> &node, vector<pair<T, int> > &nodes) {
         if (node) {
             inorder(node->left, nodes);
             nodes.push_back(make_pair(node->data, node->priority));
@@ -120,9 +108,7 @@ public:
         root = nullptr;
     }
 
-    ~Treap() {
-        root = clear(root);
-    }
+    ~Treap() {}
 
     void insert(T data) {
         root = insert(root, data);
