@@ -20,8 +20,8 @@ private:
             right = nullptr;
         }
 
-        Node(T&& data) {
-            this->data = move(data);
+        Node(T data) {
+            this->data = data;
             priority = rand() % PRIORITY_POOL;
             left = nullptr;
             right = nullptr;
@@ -46,7 +46,7 @@ private:
 
     unique_ptr<Node> insert(unique_ptr<Node> &node, T data) {
         if (!node)
-            return make_unique<Node>(move(data));
+            return make_unique<Node>(data);
 
         if (data < node->data) {
             node->left = insert(node->left, data);
@@ -110,7 +110,7 @@ public:
         root = nullptr;
     }
 
-    ~Treap() {}
+    virtual ~Treap() {}
 
     void insert(T data) {
         root = insert(root, data);
