@@ -138,6 +138,13 @@ public:
         return max(root)->data;
     }
 
+    bool find(T data) {
+        if (find(data, root) != nullptr) {
+            return true;
+        }
+        return false;
+    }
+
     void print() {
         vector<T> nodes;
         inorder(nodes, root);
@@ -147,13 +154,6 @@ public:
         }
 
         cout << endl;
-    }
-
-    bool find(T data) {
-        if (find(data, root) != nullptr) {
-            return true;
-        }
-        return false;
     }
 };
 
