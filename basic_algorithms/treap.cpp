@@ -48,7 +48,7 @@ private:
         if (!node)
             return make_unique<Node>(data);
 
-        if (data < node->data) {
+        if (data <= node->data) {
             node->left = insert(node->left, data);
 
             if (node->left->priority > node->priority)
@@ -132,7 +132,7 @@ public:
         inorder(root, nodes);
 
         for (size_t i = 0; i < nodes.size(); ++i) {
-            cout << "{" << nodes[i].first << ", " << nodes[i].second  << "} ";
+            cout << "{d: " << nodes[i].first << ", p:" << nodes[i].second  << "} ";
         }
 
         cout << endl;
