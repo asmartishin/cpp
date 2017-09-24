@@ -52,7 +52,7 @@ class Table(object):
     def _add_win(self, team):
         self.table[team]['number_of_wins'] += 1
 
-    def __repr__(self):
+    def __str__(self):
         sorted_team_names = sorted(self._team_names)
 
         places = set()
@@ -98,8 +98,8 @@ class Table(object):
                 return i
         return None
 
-    def __str__(self):
-        return self.__repr__()
+    def __repr__(self):
+        return self.__str__()
 
 
 class Game(object):
@@ -111,7 +111,7 @@ class Game(object):
         self.first_team_points = int(game_data[4].split(':')[0])
         self.second_team_points = int(game_data[4].split(':')[1])
 
-    def __repr__(self):
+    def __str__(self):
         return "{} - {} - {}:{}".format(
             self.first_team,
             self.second_team,
@@ -119,8 +119,8 @@ class Game(object):
             self.second_team_points
         )
 
-    def __str__(self):
-        return self.__repr__()
+    def __repr__(self):
+        return self.__str__()
 
 
 if __name__ == '__main__':
