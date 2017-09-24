@@ -63,7 +63,8 @@ class Table(object):
 
         top_places = sorted(places, reverse=True)[:3]
 
-        delimiter = '+' + '-' * (len(str(len(sorted_team_names)))) + '+' + '-' *  (self._max_team_name + 1) + '+' + '-+' * len(sorted_team_names) + '-' * len(str(self._max_score)) + '+-+\n'
+        delimiter = '+' + '-' * (len(str(len(sorted_team_names)))) + '+' + '-' *  (self._max_team_name + 1) + '+' + \
+            '-+' * len(sorted_team_names) + '-' * len(str(self._max_score)) + '+-+\n'
         result = delimiter
 
         for i, team_name in enumerate(sorted_team_names):
