@@ -17,7 +17,7 @@ private:
             right = nullptr;
         }
 
-        Node (T data, Node *left = nullptr, Node *right = nullptr)
+        Node(T data, Node *left = nullptr, Node *right = nullptr)
             : data(data), left(left), right(right) {}
     };
 
@@ -98,12 +98,11 @@ private:
         return node;
     }
 
-    Node* insert(T data, Node* node) {
+    Node* insert(Node* node, T data) {
         Node *new_node = new Node(data);
 
         if (!node) {
-            node = new_node;
-            return node;
+            return new_node;
         }
 
         node = splay(data, node);
@@ -123,7 +122,7 @@ private:
         return node;
     }
 
-    Node* erase(T data, Node *node) {
+    Node* erase(Node *node, T data) {
         if (!node)
             return nullptr;
 
@@ -154,13 +153,13 @@ private:
         }
     }
 
-    Node* find(T data, Node *n) {
+    Node* find(Node *n, T data) {
         if (n == nullptr) {
             return nullptr;
         } else if (data < n->data) {
-            return find(data, n->left);
+            return find(n->left, data);
         } else if (data > n->data) {
-            return find(data, n->right);
+            return find(n->right, data);
         } else {
             return n;
         }
@@ -176,15 +175,15 @@ public:
     }
 
     void insert(T data) {
-        root = insert(data, root);
+        root = insert(root, data);
     }
 
     void erase(T data) {
-        root = erase(data, root);
+        root = erase(root, data);
     }
 
     bool find(T data) {
-        if (find(data, root) != nullptr) {
+        if (find(root, data) != nullptr) {
             return true;
         }
         return false;
@@ -217,5 +216,7 @@ int main() {
     st.erase(6);
 
     st.print();
+
+    cout << st.find(7) << endl;
     return 0;
 }
