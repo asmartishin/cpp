@@ -153,7 +153,6 @@ int main() {
         }
     }
 
-
     while (true) {
         vector<double> possible_solution(n, 0);
 
