@@ -5,16 +5,16 @@ using namespace std;
 
 
 void move_spaces_to_end(string &s) {
-    size_t j = 0;
-    for (size_t i = 0; i < s.size(); ++i) {
-        if (s[i] == ' ') {
-            while (s[j] == ' ' && j < s.size())
-                ++j;
-            swap(s[i], s[j]);
-        }
-        ++j;
+    size_t i = 0;
+    for (size_t j = 0; j < s.size(); ++j) {
+        if (s[j] != ' ')
+            s[i++] = s[j];
     }
+
+    while (i < s.size())
+        s[i++] = ' ';
 }
+
 
 int main() {
     string s;
