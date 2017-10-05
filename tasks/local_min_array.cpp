@@ -4,19 +4,26 @@
 using namespace std;
 
 
-int local_min(vector<int> &v, int l, int r) {
-    int m = l + r / 2;
+int local_min(vector<int> &v) {
+    int l = 0, r = v.size();
 
-    if (m - 1 > 0 && m + 1 < v.size()) {
-        if (v[m - 1] > v[m] && v[m + 1] > v[m])
-            return v[m];
-        else if (v[m - 1] < v[m])
-            return local_min(v, l, m + 1);
-        else
-            return local_min(v, m, r);
-    } else {
-        return v[m];
+    if (v[l] <= v[l + 1])
+        return v[l];
+    else if (v[r - 2] >= v[r - 1])
+        return v[r];
+    else {
+        while (l < r) {
+            int m = (l + r) / 2;
+            if (v[m - 1] >= v[m] && v[m + 1] >= v[m])
+                return v[m];
+            else if (v[m - 1] <= v[m])
+                r = m + 1;
+            else
+                l = m;
+        }
     }
+
+    return -1;
 }
 
 
@@ -31,5 +38,5 @@ int main() {
         cin >> v[i];
     }
 
-    cout << local_min(v, 0, n) << endl;
+    cout << local_min(v) << endl;
 }
