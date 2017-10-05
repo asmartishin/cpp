@@ -5,7 +5,7 @@ using namespace std;
 
 
 int local_min(vector<int> &v, int l, int r) {
-    int m = l + r / 2;
+    int m = (l + r) / 2;
 
     if (m - 1 > 0 && m + 1 < v.size()) {
         if (v[m - 1] > v[m] && v[m + 1] > v[m])
