@@ -17,8 +17,6 @@ int main() {
 
     size_t l = 0, r = 0;
 
-    cout << s << endl;
-
     for (size_t i = 0; i < n; ++i) {
         if (s[i] == ' ' || i == n - 1) {
             if (processing) {
@@ -27,7 +25,6 @@ int main() {
                 else
                     r = i - 1;
 
-                cout << l << ' ' << r << endl;
                 while (l < r)
                     swap(s[l++], s[r--]);
                 processing = false;
