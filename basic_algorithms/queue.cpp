@@ -15,7 +15,7 @@ private:
 public:
     Queue() {front = nullptr; back = nullptr;}
 
-    void push_back(T data) {
+    void push(T data) {
         Node *ptr = new Node;
         ptr->data = data;
         ptr->next = nullptr;
@@ -29,7 +29,7 @@ public:
         }
     }
 
-    T pop_back() {
+    T pop() {
         if (front == nullptr) {
             throw runtime_error("Queue is empty");
         }
@@ -79,12 +79,10 @@ int main() {
 
     for (size_t i = 0; i < n; ++i) {
         cin >> d;
-        q.push_back(d);
+        q.push(d);
     }
 
-    q.print();
-
     for (size_t i = 0; i < n; ++i) {
-        cout << q.pop_back() << endl;
+        cout << q.pop() << endl;
     }
 }

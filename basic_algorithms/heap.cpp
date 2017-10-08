@@ -31,7 +31,7 @@ class Heap {
         int left = getLeftChild(node);
         int right = getRightChild(node);
 
-	int smallest = [](const vector<pair<int, int> > &v) {
+        int smallest = [](const vector<pair<int, int> > &v) {
             return min_element(v.begin(), v.end())->second;
         }({
             {heap[node], node},

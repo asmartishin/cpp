@@ -5,7 +5,7 @@ using namespace std;
 
 
 int binarySearchRecursive(const vector<int> &v, int l, int r, int k) {
-    if (l == r)
+    if (l >= r)
         return -1;
 
     int m = l + (r - l) / 2;
@@ -25,7 +25,7 @@ int binarySearchIterative(const vector<int> &v, int k) {
     int m;
 
     while (l < r) {
-        m = l + (r - l) / 2;
+        m = (l + r) / 2;
 
         if (v[m] == k)
             return m;
