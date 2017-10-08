@@ -27,7 +27,7 @@ void dfs(vector<vector<bool> > &matrix, set<pair<int, int> > &not_visited, pair<
         pair<int, int> cv = s.top();
         s.pop();
 
-        for (auto&nv: {
+        for (auto& nv: {
             make_pair(cv.first + 1, cv.second),
             make_pair(cv.first, cv.second + 1),
             make_pair(cv.first - 1, cv.second),

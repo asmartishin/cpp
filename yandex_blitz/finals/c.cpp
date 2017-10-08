@@ -53,7 +53,7 @@ vector<double> multiply_vector_by_number(double number, const vector<double> &v)
 
 
 vector<double> inverse_vector(const vector<double> &v) {
-    return multiply_vector_by_number(-1, std::move(v));
+    return multiply_vector_by_number(-1, v);
 }
 
 bool is_vector_zero(vector<double> &v) {
