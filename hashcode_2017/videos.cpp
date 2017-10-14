@@ -431,8 +431,8 @@ int main() {
     TVideoCSResponse videoCSResponse;
     TVideoScheme videoScheme(input_file_name, videoTimings, requestReader, videoCSResponse);
     TEPVideoDuration EPVideoDuration;
-    TVideoCSIndex videCSIndex(videoTimings, requestReader, videoCSResponse, EPVideoDuration);
-    videCSIndex.PlaceVideos();
+    TVideoCSIndex videoCSIndex(videoTimings, requestReader, videoCSResponse, EPVideoDuration);
+    videoCSIndex.PlaceVideos();
     videoCSResponse.Dump(output_file_name);
     return 0;
 }
