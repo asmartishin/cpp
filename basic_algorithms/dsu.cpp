@@ -33,6 +33,7 @@ void Union(vector<int> &parent, vector<int> &rank, int a, int b) {
     }
 }
 
+
 void PrintDSU(vector<int> &parent, vector<int> &rank) {
     for (size_t i = 1; i < parent.size(); ++i) {
         cout << i << ' ' << parent[i] << ' ' << rank[i] << endl;
