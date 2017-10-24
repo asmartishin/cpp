@@ -20,7 +20,7 @@ private:
             {19, 'S'}, {20, 'T'}, {21, 'U'}, {22, 'V'}, {23, 'W'}, {24, 'X'}, {25, 'Y'}, {0, 'Z'}
         }};
 
-        string repr(const int value) {
+        string value_to_string(const int value) {
             int tmp_value = value;
             string result = "";
 
@@ -28,7 +28,7 @@ private:
                 result += int_to_char[tmp_value % 26];
 
                 if (tmp_value % 26 == 0)
-                    tmp_value -= 1;
+                    --tmp_value;
 
                 tmp_value /= 26;
             }
@@ -52,7 +52,7 @@ private:
         }
 
         string operator*() {
-            return repr(value);
+            return value_to_string(value);
         }
     };
 
