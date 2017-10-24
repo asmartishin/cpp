@@ -7,30 +7,28 @@ using namespace std;
 
 class LexStringGenerator {
 private:
-    int range;
+    int start;
+    int stop;
 
-    class LexString{
+    class LexString {
     private:
-        int range;
         int value;
 
-        unordered_map<int, char> int_to_char{{
-            {1, 'A'}, {2, 'B'}, {3, 'C'}, {4, 'D'}, {5, 'E'}, {6, 'F'}, {7, 'G'}, {8, 'H'}, {9, 'I'}, {10, 'J'},
-            {11, 'K'}, {12, 'L'}, {13, 'M'}, {14, 'N'}, {15, 'O'}, {16, 'P'}, {17, 'Q'}, {18, 'R'},
-            {19, 'S'}, {20, 'T'}, {21, 'U'}, {22, 'V'}, {23, 'W'}, {24, 'X'}, {25, 'Y'}, {0, 'Z'}
-        }};
+    public:
+        LexString(int value)
+            : value(value) {}
 
-        string value_to_string(const int value) {
-            int tmp_value = value;
+        static string value_to_string(int value) {
             string result = "";
 
-            while (tmp_value) {
-                result += int_to_char[tmp_value % 26];
+            while (value) {
+                if (value % 26 == 0) {
+                    result += 'Z';
+                    --value;
+                } else
+                    result += (char)(value % 26 + 64);
 
-                if (tmp_value % 26 == 0)
-                    --tmp_value;
-
-                tmp_value /= 26;
+                value /= 26;
             }
 
             reverse(result.begin(), result.end());
@@ -38,9 +36,15 @@ private:
             return result;
         }
 
-    public:
-        LexString(int range, int value)
-            : range(range), value(value) {}
+        static int string_to_value(string s) {
+            int result = 0;
+
+            for (size_t i = 0; i < s.size(); ++i) {
+                result = result * 26 + (int)s[i] - 64;
+            }
+
+            return result;
+        }
 
         bool operator!=(const LexString& other) const {
             return value < other.value;
@@ -57,24 +61,28 @@ private:
     };
 
 public:
-    LexStringGenerator(int range)
-        : range(range + 1) {}
+    LexStringGenerator(string start, int range) {
+        this->start = LexString::string_to_value(start);
+        this->stop = this->start + range + 1;
+    }
 
     LexString begin() const {
-        return LexString(range, 1);
+        return LexString(start);
     }
 
     LexString end() const {
-        return LexString(range, range);
+        return LexString(stop);
     }
 };
 
 
 int main() {
+    string s;
     int n;
-    cin >> n;
 
-    for (const auto& i: LexStringGenerator(n))
+    cin >> s >> n;
+
+    for (const auto& i: LexStringGenerator(s, n))
         cout << i << endl;
 
     return 0;
