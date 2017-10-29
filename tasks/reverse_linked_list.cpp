@@ -1,103 +1,197 @@
 #include <iostream>
-#include <initializer_list>
 
 using namespace std;
 
 
-template <typename T>
-class Linkedlist {
-private:
-    struct Node {
-        T data;
-        Node *next;
+struct Node {
+    int data;
+    Node *next;
 
-        Node(T data) {
-            this->data = data;
-            next = nullptr;
-        }
-    };
-    Node *head;
+    Node(int data, Node *next = nullptr)
+        : data(data), next(next) {}
+};
+
+
+class SinglyLinkedList {
+private:
+    Node *head, *tail;
+    size_t size_;
 
 public:
-    Linkedlist() {
+    SinglyLinkedList() {
         head = nullptr;
+        tail = nullptr;
+        size_ = 0;
     }
 
-    Linkedlist(initializer_list<T> args) {
-        head = nullptr;
-
-    	for (auto it = args.begin(); it != args.end(); ++it)
-            this->push(*it);
-    }
-
-    void push(T data) {
-        Node *new_node = new Node(data);
-
-        if (!head)
-            head = new_node;
-        else {
-            Node *current_node = head;
-            while (current_node->next)
-                current_node = current_node->next;
-            current_node->next = new_node;
+    ~SinglyLinkedList() {
+        while (head != nullptr) {
+            Node *current = head;
+            head = head->next ;
+            delete current;
         }
+        tail = nullptr;
     }
 
-    T pop() {
-        if (!head)
+    int front() {
+        if (head == nullptr)
+            throw runtime_error("List is empty");
+        return head->data;
+    }
+
+    int back() {
+        if (tail == nullptr)
+            throw runtime_error("List is empty");
+        return tail->data;
+    }
+
+    size_t size() {
+        return size_;
+    }
+
+    void push_front(int data) {
+        head = new Node(data, head);
+
+        if (head == nullptr)
+            tail = head;
+
+        ++size_;
+    }
+
+    void pop_front() {
+        if (head == nullptr)
+            throw runtime_error("List is empty");
+
+        Node *current = head;
+        head = head->next;
+
+        if (head == nullptr)
+            tail = nullptr;
+
+        delete current;
+    }
+
+    void push_back(int data) {
+        Node *current = new Node(data);
+
+        if (tail == nullptr) {
+            head = tail = current;
+        } else {
+            tail->next = current;
+            tail = current;
+        }
+
+        ++size_;
+    }
+
+    void pop_back() {
+        if (tail == nullptr)
+            throw runtime_error("List is empty");
+
+        Node *current = head;
+        Node *previous = nullptr;
+
+        while (current->next != nullptr) {
+            previous = current;
+            current = current->next;
+        }
+
+        tail = previous;
+        tail->next = nullptr;
+
+        delete current;
+    }
+
+    void insert(int data, int position) {
+        if (position > size_ - 1)
             throw out_of_range("Bad index");
 
-        Node *old_head_node = head;
-        T data = old_head_node->data;
+        if (position == 0)
+            this->push_front(data);
+        else if (position == size_ - 1)
+            this->push_back(data);
+        else {
+            Node *next = head;
+            Node *previous = nullptr;
 
-        if (old_head_node->next)
-            head = old_head_node->next;
-        else
-            head = nullptr;
+            for (size_t i = 0; i < position; ++i) {
+                previous = next;
+                next = next->next;
+            }
 
-        delete old_head_node;
-        return data;
+            Node *current = new Node(data, next);
+            previous->next = current;
+        }
+
+        ++size_;
     }
 
-    void print() {
-        Node *current_node = head;
+    void erase(int position) {
+        if (position > size_ - 1)
+            throw out_of_range("Bad index");
 
-        while (current_node) {
-            cout << current_node->data << ' ';
-            current_node = current_node->next;
+        if (position == 0)
+            this->pop_front();
+        else if (position == size_ - 1)
+            this->pop_back();
+        else {
+            Node *current = head;
+            Node *previous = nullptr;
+
+            for (size_t i = 0; i < position; ++i) {
+                previous = current;
+                current = current->next;
+            }
+
+            previous->next = current->next;
+            delete current;
         }
-        cout << endl;
+
+        --size_;
     }
 
     void reverse() {
-        Node *previous_node = nullptr;
-        Node *current_node = head;
-        Node *next_node;
+        Node *previous = nullptr;
+        Node *current = head;
+        Node *next = nullptr;
 
-        while (current_node != nullptr) {
-            next_node=current_node->next;
-            current_node->next = previous_node;
+        tail = head;
 
-            previous_node = current_node;
-            current_node = next_node;
+        while (current != nullptr) {
+            next = current->next;
+            current->next = previous;
+            previous = current;
+            current = next;
         }
 
-        head = previous_node;
+        head = previous;
     }
 
-    ~Linkedlist() {
-        while (head != nullptr) {
-            Node *old_head_node = head;
-            head = head->next;
-            delete old_head_node;
+    void print() {
+        Node *current = head;
+
+        while (current != nullptr) {
+            cout << current->data << ' ';
+            current = current->next;
         }
+
+        cout << endl;
     }
 };
 
-int main() {
-    Linkedlist<double> q = {1,2,3,4};
 
-    q.print();
-    q.reverse();
-    q.print();
+int main() {
+    SinglyLinkedList linked_list;
+
+    linked_list.push_back(1);
+    linked_list.push_back(2);
+    linked_list.insert(3, 1);
+    linked_list.push_front(4);
+    linked_list.erase(2);
+    linked_list.print();
+
+    linked_list.reverse();
+    linked_list.print();
+
+    return 0;
 }
