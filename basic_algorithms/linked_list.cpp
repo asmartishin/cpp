@@ -18,11 +18,8 @@ private:
     size_t size_;
 
 public:
-    SinglyLinkedList() {
-        head = nullptr;
-        tail = nullptr;
-        size_ = 0;
-    }
+    SinglyLinkedList(Node *head = nullptr, Node *tail = nullptr, size_t size_ = 0)
+        : head(head), tail(tail), size_(size_) {}
 
     ~SinglyLinkedList() {
         while (head != nullptr) {
