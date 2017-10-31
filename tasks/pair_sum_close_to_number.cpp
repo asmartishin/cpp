@@ -31,16 +31,13 @@ void PairSumCloseToNumber(vector<int> numbers, int sum) {
 
 int main() {
     int n, sum;
-
     cin >> n >> sum;
-
     vector<int> numbers(n);
 
     for (size_t i = 0; i < n; ++i)
         cin >> numbers[i];
 
     sort(numbers.begin(), numbers.end());
-
     PairSumCloseToNumber(numbers, sum);
 
     return 0;

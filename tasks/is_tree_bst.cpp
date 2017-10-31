@@ -26,8 +26,9 @@ bool IsBinarySearchTree(const vector<Node>& tree, const Node& root, int min, int
 
     return (
         (root.left == -1 || IsBinarySearchTree(tree, tree[root.left], min, root.key - 1)) &&
-        (root.right == -1 || IsBinarySearchTree(tree, tree[root.right], root.key + 1, max))
+        (root.right == -1 || IsBinarySearchTree(tree, tree[root.right], root.key, max))
     );
+    return true;
 }
 
 
@@ -35,13 +36,11 @@ int main() {
     int nodes;
     cin >> nodes;
     vector<Node> tree;
-
     for (int i = 0; i < nodes; ++i) {
         int key, left, right;
         cin >> key >> left >> right;
         tree.push_back(Node(key, left, right));
     }
-
     if (nodes == 0 || IsBinarySearchTree(tree, tree[0], INT_MIN, INT_MAX)) {
         cout << "CORRECT" << endl;
     } else {
