@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 
 using namespace std;
 
@@ -58,15 +57,11 @@ public:
 
 
 int main() {
-    int n, d;
     Stack s;
 
-    cin >> n;
-
-    for (size_t i = 0; i < n; ++i) {
-        cin >> d;
-        s.push(d);
-    }
+    s.push(1);
+    s.push(2);
+    s.push(3);
 
     cout << endl;
 
