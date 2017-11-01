@@ -56,6 +56,12 @@ class Heap {
 public:
     Heap() {}
 
+    Heap(vector<T> input) {
+        heap = input;
+        for (int i = heap.size() / 2; i >= 0; --i)
+            siftDown(i);
+    }
+
     unsigned int size() {
         return heap.size();
     }
@@ -106,23 +112,16 @@ public:
 
 
 int main() {
-    Heap<int> h;
+    vector<int> input{6, 2, 3, 4, 5, 1};
 
-    int n, k, v;
-
-    cin >> n >> k;
-
-    for (size_t i = 0; i < n; ++i) {
-        cin >> v;
-        h.push(v);
-    }
+    Heap<int> h{input};
 
     h.print();
 
-    for (int i = 0; i < k - 1; ++i) {
+    for (int i = 0; i < input.size(); ++i) {
+        cout << h.top() << endl;
         h.pop();
     }
 
-    cout << h.top() << endl;
     return 0;
 }
