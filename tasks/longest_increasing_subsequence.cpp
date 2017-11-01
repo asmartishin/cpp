@@ -62,7 +62,6 @@ int main() {
 
     vector<pair<int, int> > pairs(n);
 
-
     for (size_t i = 0; i < n; ++i) {
         cin >> pairs[i].first;
         pairs[i].second = i;

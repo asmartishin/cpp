@@ -115,5 +115,5 @@ public:
 
 int main(){
     Polynom<int> x;
-    std::cout <<  5 * x * x * x + 3 * x  + 1;
+    std::cout <<  5 * x * x * x + 3 * x + 1;
 }
