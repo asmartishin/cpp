@@ -1,16 +1,21 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <limits>
 
 using namespace std;
 
 
-void bfs(vector<vector<int> > &graph, vector<int> &dist, int b) {
-    queue<int> q;
+enum color {WHITE, BLACK, GREY};
 
-    dist[b] = 0;
-    q.push(b);
+
+bool bipartite(vector<vector<int> > &graph) {
+    int n = graph.size();
+    vector<int> colors(n, GREY);
+    queue<int> q;
+    bool is_bipartite = true;
+
+    colors[1] = WHITE;
+    q.push(1);
 
     while (!q.empty()) {
         int v = q.front();
@@ -19,25 +24,21 @@ void bfs(vector<vector<int> > &graph, vector<int> &dist, int b) {
         for (size_t i = 0; i < graph[v].size(); ++i) {
             int nv = graph[v][i];
 
-            if (dist[nv] == numeric_limits<int>::max()) {
+            if (colors[nv] == GREY) {
                 q.push(nv);
-                dist[nv] = dist[v] + 1;
+
+                if (colors[v] == WHITE)
+                    colors[nv] = BLACK;
+                else
+                    colors[nv] = WHITE;
+            } else if (colors[nv] == colors[v]) {
+                is_bipartite = false;
+                break;
             }
         }
     }
-}
 
-
-int distance(vector<vector<int> > &graph, int b, int e) {
-    int n = graph.size();
-    vector<int> dist(n, numeric_limits<int>::max());
-
-    bfs(graph, dist, b);
-
-    if (dist[e] != numeric_limits<int>::max())
-        return dist[e];
-
-    return -1;
+    return is_bipartite;
 }
 
 
@@ -45,16 +46,12 @@ int main() {
     int n, m;
     cin >> n >> m;
     vector<vector<int> > graph(n, vector<int>());
-
     for (int i = 0; i < m; i++) {
         int x, y;
         cin >> x >> y;
         graph[x - 1].push_back(y - 1);
         graph[y - 1].push_back(x - 1);
     }
-
-    int b, e;
-    cin >> b >> e;
-    b--, e--;
-    cout << distance(graph, b, e);
+    cout << bipartite(graph) << endl;
 }
+
