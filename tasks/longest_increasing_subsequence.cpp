@@ -51,19 +51,12 @@ void buildTree(vector<int> &tree, int index,  int left, int right, int origin_in
 }
 
 
-int main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.precision(10);
-
-    int n;
-
-    cin >> n;
-
+void lis_tree(vector<int> &numbers) {
+    int n = numbers.size();
     vector<pair<int, int> > pairs(n);
 
     for (size_t i = 0; i < n; ++i) {
-        cin >> pairs[i].first;
+        pairs[i].first = numbers[i];
         pairs[i].second = i;
     }
 
@@ -79,6 +72,67 @@ int main() {
     }
 
     cout << tree[0] << endl;
+}
+
+
+void lis_dp(vector<int> &numbers) {
+    int n = numbers.size();
+
+    vector<int> states(n + 1);
+    vector<int> pos(n + 1);
+    vector<int> prev(n + 1);
+
+    int length = 0;
+
+    pos[0] = -1;
+    states[0] = numeric_limits<int>::min();
+
+    for (size_t i = 1; i <= n; ++i)
+        states[i] = numeric_limits<int>::max();
+
+    for (size_t i = 0; i < n; ++i) {
+        int j = upper_bound(states.begin(), states.end(), numbers[i]) - states.begin();
+
+        if (states[j - 1] < numbers[i] && numbers[i] < states[j]) {
+            states[j] = numbers[i];
+            pos[j] = i;
+            prev[i] = pos[j - 1];
+            length = max(length, j);
+        }
+    }
+
+    vector<int> result;
+
+    int p = pos[length];
+
+    while (p != -1) {
+        result.push_back(numbers[p]);
+        p = prev[p];
+    }
+
+    reverse(result.begin(), result.end());
+
+    for (size_t i = 0; i < result.size(); ++i)
+        cout << result[i] << ' ';
+
+    cout << endl;
+}
+
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.precision(10);
+
+    int n;
+    cin >> n;
+
+    vector<int> numbers(n);
+
+    for (size_t i = 0; i < n; ++i)
+        cin >> numbers[i];
+
+    lis_dp(numbers);
 
     return 0;
 }
