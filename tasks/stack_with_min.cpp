@@ -30,6 +30,10 @@ struct MinStack {
     int min() {
         return ms.top();
     }
+
+    int size() {
+        return s.size();
+    }
 };
 
 
