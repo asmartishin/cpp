@@ -7,7 +7,7 @@ using namespace std;
 
 
 void dfs(vector<vector<int> > &adj, set<int> &nodes, int x, int n) {
-    vector<char> used(n);
+    vector<char> visited(n);
     stack<int> s;
     s.push(x);
 
@@ -15,9 +15,9 @@ void dfs(vector<vector<int> > &adj, set<int> &nodes, int x, int n) {
         int v = s.top();
         s.pop();
         for (size_t i = 0; i < adj[v].size(); ++i) {
-            if (!used[adj[v][i]]) {
+            if (!visited[adj[v][i]]) {
                 s.push(adj[v][i]);
-                used[adj[v][i]] = true;
+                visited[adj[v][i]] = true;
             }
         }
         nodes.erase(v);

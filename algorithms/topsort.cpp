@@ -6,11 +6,11 @@ using std::vector;
 using std::pair;
 
 
-void dfs(int v, vector<vector<int> > &graph, vector<char> &used, vector<int> &order) {
-    used[v] = true;
+void dfs(int v, vector<vector<int> > &graph, vector<char> &visited, vector<int> &order) {
+    visited[v] = true;
     for (size_t i =0; i < graph[v].size(); ++i)
-        if (!used[graph[v][i]])
-            dfs(graph[v][i], graph, used, order);
+        if (!visited[graph[v][i]])
+            dfs(graph[v][i], graph, visited, order);
     order.push_back(v);
 }
 
@@ -18,12 +18,12 @@ void dfs(int v, vector<vector<int> > &graph, vector<char> &used, vector<int> &or
 vector<int> topsort(vector<vector<int> > graph) {
     int n = graph.size();
 
-    vector<char> used(n, false);
+    vector<char> visited(n, false);
     vector<int> order;
 
     for (size_t i = 0; i < n; ++i) {
-        if (!used[i])
-            dfs(i, graph, used, order);
+        if (!visited[i])
+            dfs(i, graph, visited, order);
     }
 
     reverse(order.begin(), order.end());

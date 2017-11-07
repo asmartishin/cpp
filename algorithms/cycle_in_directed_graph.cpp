@@ -11,27 +11,27 @@ enum States {
 };
 
 
-bool dfs(int v, vector<vector<int> > &graph, vector<States> &used) {
+bool dfs(int v, vector<vector<int> > &graph, vector<States> &visited) {
     bool cycle = false;
 
-    used[v] = VISITING;
+    visited[v] = VISITING;
     for (size_t i =0; i < graph[v].size(); ++i)
-        if (used[graph[v][i]] == VISITING)
+        if (visited[graph[v][i]] == VISITING)
             return true;
-        else if (used[graph[v][i]] == NOT_VISITED)
-            cycle |= dfs(graph[v][i], graph, used);
-    used[v] = VISITED;
+        else if (visited[graph[v][i]] == NOT_VISITED)
+            cycle |= dfs(graph[v][i], graph, visited);
+    visited[v] = VISITED;
     return cycle;
 }
 
 
 bool cyclic(vector<vector<int> > &graph) {
     int n = graph.size();
-    vector<States> used(n,  NOT_VISITED);
+    vector<States> visited(n,  NOT_VISITED);
 
     for (size_t i = 0; i < n; ++i) {
-        if (used[i] == NOT_VISITED)
-            if (dfs(i, graph, used))
+        if (visited[i] == NOT_VISITED)
+            if (dfs(i, graph, visited))
                 return true;
     }
 
