@@ -1,5 +1,8 @@
 #include <iostream>
 
+//least common multiple
+
+
 long gcd(long a, long b) {
     while (b) {
         a %= b;
@@ -8,9 +11,11 @@ long gcd(long a, long b) {
     return a;
 }
 
+
 long lcm(long a, long b) {
     return a * b / gcd(a, b);
 }
+
 
 int main() {
     long a, b;

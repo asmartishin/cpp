@@ -2,6 +2,8 @@
 
 using namespace std;
 
+//greatest common divisor
+
 
 int gcd(int n, int k) {
     while (k) {
