@@ -14,6 +14,7 @@
 using namespace std;
 
 #define endl '\n'
+
 //longest increasing subsequence
 
 int findMax(vector<int> tree, int index, int left, int right, int query_start, int query_end) {
