@@ -4,42 +4,36 @@
 using namespace std;
 
 
-int partition(vector<int> &v, int l, int r) {
-    int m = v[(l + r) / 2];
+int partition(vector<int> &v, int l, int r, int pivot) {
+    swap(v[pivot], v[l]);
+    int p = l;
 
-    while (l <= r) {
-        while (v[l] < m) {
-            ++l;
-        }
-        while (v[r] > m) {
-            --r;
-        }
-        if (l <= r) {
-            swap(v[l++], v[r++]);
+    for (size_t i = l + 1; i < r; ++i) {
+        if (v[i] <= v[l]) {
+            ++p;
+            swap(v[i], v[p]);
         }
     }
-    return r;
+    swap(v[l], v[p]);
+
+    return p;
 }
 
 
-int quickSelect(vector<int> &v, int k) {
-    int l = 0;
-    int r = v.size() - 1;
+int quickSelect(vector<int> &v, int l, int r, int k) {
+    if (l < r) {
+        int pivot = (l + r) / 2;
+        int p = partition(v, l, r, pivot);
 
-    while (l <= r) {
-        int m = partition(v, l, r);
-
-        if (m == k) {
-            return v[m];
-        } else if (k < m) {
-            r = m;
-        } else {
-            k -= m + 1;
-            l = m + 1;
-        }
+        if (p == k)
+            return v[k];
+        else if (k < p)
+            return quickSelect(v, l, p, k);
+        else
+            return quickSelect(v, p + 1, r, k);
+    } else {
+        return v[l];
     }
-
-    return -1;
 }
 
 
@@ -47,6 +41,7 @@ int main() {
     int n, k;
 
     cin >> n >> k;
+    --k;
 
     vector<int> v(n);
 
@@ -54,6 +49,6 @@ int main() {
        cin >> v[i];
     }
 
-    cout << quickSelect(v, k) << endl;
+    cout << quickSelect(v, 0, v.size(), k) << endl;
     return 0;
 }
