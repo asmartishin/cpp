@@ -56,18 +56,32 @@ public:
 
 template <class T> class SmartPointer {
 protected:
+    struct ReferenceCounter {
+        size_t count;
+
+        ReferenceCounter()
+            : count(0) {}
+
+        size_t AddReference() {
+            return ++count;
+        }
+
+        size_t RemoveReference() {
+            return --count;
+        }
+    };
     T *ref;
-    size_t ref_count;
+    ReferenceCounter* ref_counter;
 public:
     SmartPointer(T *ptr) {
         ref = ptr;
-        ref_count = 1;
+        ref_counter = new ReferenceCounter();
     }
 
-    SmartPointer(SmartPointer<T> &sptr) {
-        ref = sptr.ref;
-        ref_count = sptr.ref_count;
-        ++ref_count;
+    SmartPointer(const SmartPointer<T> &other) {
+        ref = other.ref;
+        ref_counter = other.ref_counter;
+        ref_counter->AddReference();
     }
 
     T& operator*() {
@@ -81,15 +95,14 @@ public:
     SmartPointer<T> & operator=(const SmartPointer<T> &other) {
         if (this != &other) {
             ref = other.ref;
-            ref_count = other.ref_count;
-            ++ref_count;
+            ref_counter = other.ref_counter;
+            ref_counter->AddReference();
         }
         return *this;
     }
 
     ~SmartPointer() {
-        --ref_count;
-        if (ref_count == 0)
+        if (ref_counter->RemoveReference() == 0)
             delete ref;
     }
 };
