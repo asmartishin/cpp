@@ -91,13 +91,7 @@ public:
     }
 
     SmartPointer(const SmartPointer<T> &other) {
-        if (this != &other) {
-            RemoveReference();
-
-            ref = other.ref;
-            ref_counter = other.ref_counter;
-            AddReference();
-        }
+        *this = other;
     }
 
     T& operator*() {
