@@ -60,7 +60,7 @@ protected:
         size_t count;
 
         ReferenceCounter()
-            : count(0) {}
+            : count(1) {}
 
         size_t AddReference() {
             return ++count;
@@ -79,9 +79,16 @@ public:
     }
 
     SmartPointer(const SmartPointer<T> &other) {
-        ref = other.ref;
-        ref_counter = other.ref_counter;
-        ref_counter->AddReference();
+        if (this != &other) {
+            if (ref_counter->RemoveReference() == 0) {
+                delete ref;
+                delete ref_counter;
+            }
+
+            ref = other.ref;
+            ref_counter = other.ref_counter;
+            ref_counter->AddReference();
+        }
     }
 
     T& operator*() {
