@@ -94,7 +94,6 @@ public:
 
     SmartPointer<T> & operator=(const SmartPointer<T> &other) {
         if (this != &other) {
-
             if (ref_counter->RemoveReference() == 0) {
                 delete ref;
                 delete ref_counter;
