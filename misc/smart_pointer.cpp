@@ -57,11 +57,11 @@ public:
 template <class T> class SmartPointer {
 protected:
     T *ref;
-    size_t ref_count = 0;
+    size_t ref_count;
 public:
     SmartPointer(T *ptr) {
         ref = ptr;
-        ++ref_count;
+        ref_count = 1;
     }
 
     SmartPointer(SmartPointer<T> &sptr) {
@@ -78,10 +78,10 @@ public:
         return ref;
     }
 
-    SmartPointer<T> & operator=(SmartPointer<T> &sptr) {
-        if (this != &sptr) {
-            ref = sptr.ref;
-            ref_count = sptr.ref_count;
+    SmartPointer<T> & operator=(const SmartPointer<T> &other) {
+        if (this != &other) {
+            ref = other.ref;
+            ref_count = other.ref_count;
             ++ref_count;
         }
         return *this;
