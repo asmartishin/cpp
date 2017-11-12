@@ -70,6 +70,18 @@ protected:
             return --count;
         }
     };
+
+    void AddReference() {
+        ref_counter->AddReference();
+    }
+
+    void RemoveReference() {
+        if (ref_counter->RemoveReference() == 0) {
+            delete ref;
+            delete ref_counter;
+        }
+    }
+
     T *ref;
     ReferenceCounter* ref_counter;
 public:
@@ -80,14 +92,11 @@ public:
 
     SmartPointer(const SmartPointer<T> &other) {
         if (this != &other) {
-            if (ref_counter->RemoveReference() == 0) {
-                delete ref;
-                delete ref_counter;
-            }
+            RemoveReference();
 
             ref = other.ref;
             ref_counter = other.ref_counter;
-            ref_counter->AddReference();
+            AddReference();
         }
     }
 
@@ -101,23 +110,17 @@ public:
 
     SmartPointer<T> & operator=(const SmartPointer<T> &other) {
         if (this != &other) {
-            if (ref_counter->RemoveReference() == 0) {
-                delete ref;
-                delete ref_counter;
-            }
+            RemoveReference();
 
             ref = other.ref;
             ref_counter = other.ref_counter;
-            ref_counter->AddReference();
+            AddReference();
         }
         return *this;
     }
 
     ~SmartPointer() {
-        if (ref_counter->RemoveReference() == 0) {
-            delete ref;
-            delete ref_counter;
-        }
+        RemoveReference();
     }
 };
 
