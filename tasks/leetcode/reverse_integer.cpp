@@ -21,12 +21,11 @@ int reverse_integer(int n) {
         n /= 10;
     }
 
-    int p = pow(10, (nums.size() - 1));
     for (size_t i = 0; i < nums.size(); ++i) {
-        if (int_overflow(result) || int_overflow((long long)nums[i] * p))
+        result *= 10;
+        result += nums[i];
+        if (int_overflow(result))
             return 0;
-        result += nums[i] * p;
-        p /= 10;
     }
 
     return (int)result;
