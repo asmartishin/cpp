@@ -42,8 +42,8 @@ void rle(string &in_string) {
     in_string[offset++] = count.first;
     if (count.second > 1) {
         vector<int> numbers = numbers_count(count.second);
-            for (auto const &v: numbers)
-                in_string[offset++] = v + '0';
+        for (auto const &v: numbers)
+            in_string[offset++] = v + '0';
     }
 
     in_string.resize(offset);
