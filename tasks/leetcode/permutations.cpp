@@ -28,16 +28,34 @@ vector<vector<int> > permute(vector<int> &nums) {
 }
 
 
+void print_permutations(vector<int> &nums, int l, int r) {
+    if (l == r) {
+        for (auto const& v: nums) {
+            cout << v << ' ';
+        }
+        cout << endl;
+    } else {
+        for (size_t i = l; i <= r; ++i) {
+            swap(nums[l], nums[i]);
+            print_permutations(nums, l + 1, r);
+            swap(nums[l], nums[i]);
+        }
+    }
+}
+
+
 int main() {
     vector<int> nums{1, 2, 3};
 
-    auto permutations = permute(nums);
+    print_permutations(nums, 0, nums.size() - 1);
 
-    for (size_t i = 0; i < permutations.size(); ++i) {
-        for (size_t j = 0; j < permutations[i].size(); ++j)
-            cout << permutations[i][j] << ' ';
-        cout << endl;
-    }
+//    auto permutations = permute(nums);
+
+//    for (size_t i = 0; i < permutations.size(); ++i) {
+//        for (size_t j = 0; j < permutations[i].size(); ++j)
+//            cout << permutations[i][j] << ' ';
+//        cout << endl;
+//    }
 
     return 0;
 }
