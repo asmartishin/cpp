@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_set>
+#include <limits>
 
 using namespace std;
 
@@ -44,10 +45,42 @@ void print_permutations(vector<int> &nums, int l, int r) {
 }
 
 
+bool next_permutation(vector<int> &nums) {
+    int l = nums.size() - 1;
+    int r = nums.size() - 1;
+
+    while (l > 0 && nums[l - 1] >= nums[l])
+        --l;
+
+    if (l <= 0)
+        return false;
+
+    int p = l - 1;
+
+    while (nums[r] < nums[p])
+        --r;
+
+    swap(nums[p], nums[r]);
+
+    r = nums.size() - 1;
+    while (l < r) {
+        swap(nums[l++], nums[r--]);
+    }
+
+    return true;
+}
+
+
 int main() {
     vector<int> nums{1, 2, 3};
 
-    print_permutations(nums, 0, nums.size() - 1);
+    do {
+        for (auto const &v: nums)
+            cout << v << ' ';
+        cout << endl;
+    } while (next_permutation(nums));
+
+//    print_permutations(nums, 0, nums.size() - 1);
 
 //    auto permutations = permute(nums);
 
