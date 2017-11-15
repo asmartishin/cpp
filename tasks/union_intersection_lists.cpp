@@ -33,17 +33,17 @@ vector<int> intersectionOfLists(vector<int> &v1, vector<int> &v2) {
     int last_number = numeric_limits<int>::max();
 
     for (size_t i = 0; i < v1.size(); ++i) {
+        if (j >= v2.size())
+            break;
+
         while (j < v2.size() && v1[i] > v2[j])
             ++j;
 
-        if (j < v2.size()) {
-            if (last_number != v1[i] && v2[j] == v1[i]) {
-                result.push_back(v1[i]);
-                ++j;
-            }
-            last_number = v1[i];
-        } else
-            break;
+        if (last_number != v1[i] && v2[j] == v1[i]) {
+            result.push_back(v1[i]);
+            ++j;
+        }
+        last_number = v1[i];
     }
 
     return result;
