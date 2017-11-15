@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <limits>
 
 using namespace std;
 
@@ -29,17 +30,20 @@ vector<int> unionOfLists(vector<int> &v1, vector<int> &v2) {
 vector<int> intersectionOfLists(vector<int> &v1, vector<int> &v2) {
     vector<int> result;
     int j = 0;
-    for (size_t i = 0; i < v1.size(); ++i) {
-        if (j == v2.size() - 1)
-            break;
+    int last_number = numeric_limits<int>::max();
 
+    for (size_t i = 0; i < v1.size(); ++i) {
         while (j < v2.size() && v1[i] > v2[j])
             ++j;
 
-        if (v2[j] == v1[i]) {
-            result.push_back(v1[i]);
-            ++j;
-        }
+        if (j < v2.size()) {
+            if (last_number != v1[i] && v2[j] == v1[i]) {
+                result.push_back(v1[i]);
+                ++j;
+            }
+            last_number = v1[i];
+        } else
+            break;
     }
 
     return result;
@@ -48,7 +52,7 @@ vector<int> intersectionOfLists(vector<int> &v1, vector<int> &v2) {
 
 int main() {
     vector<int> v1{1, 2, 2, 5, 7, 14};
-    vector<int> v2{4, 6, 6, 7, 9, 14, 15};
+    vector<int> v2{2, 2, 4, 7, 9, 14, 15};
 
     for (auto const &v: unionOfLists(v1, v2))
         cout << v << ' ';
