@@ -28,21 +28,14 @@ vector<int> unionOfLists(vector<int> &v1, vector<int> &v2) {
 
 vector<int> intersectionOfLists(vector<int> &v1, vector<int> &v2) {
     vector<int> result;
+    int j = 0;
     for (size_t i = 0; i < v1.size(); ++i) {
-        int l = 0;
-        int r = v2.size();
+        while (j < v2.size() && v1[i] > v2[j])
+            ++j;
 
-        while (l < r) {
-            int m = (l + r) / 2;
-
-            if (v2[m] == v1[i]) {
-                result.push_back(v1[i]);
-                break;
-            }
-            else if (v2[m] < v1[i])
-                l = m + 1;
-            else
-                r = m;
+        if (v2[j] == v1[i]) {
+            result.push_back(v1[i]);
+            ++j;
         }
     }
 
