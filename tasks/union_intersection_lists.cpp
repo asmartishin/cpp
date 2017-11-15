@@ -31,7 +31,7 @@ vector<int> intersectionOfLists(vector<int> &v1, vector<int> &v2) {
     int j = 0;
     
     for (size_t i = 0; i < v1.size(); ++i) {
-        if (j == v2.size() - 1)
+        if (j >= v2.size())
             break;
 
         while (j < v2.size() && v1[i] > v2[j])
