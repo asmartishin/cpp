@@ -33,10 +33,6 @@ public:
             push_back(v);
     }
 
-    ~Vector() {
-        clear();
-    }
-
     Vector(const Vector &other) {
         *this = other;
     }
