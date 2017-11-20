@@ -24,25 +24,22 @@ int main() {
     cin.tie(0);
     cout.precision(10);
 
-    int n = 0, claw;
+    int n = 0, alive = 1;
     cin >> n;
 
-    vector<long long> dead(n, 0);
-    dead[0] = 0;
-    cin >> claw;
+    vector<int> claws(n);
 
-    for (int i = 1; i < n; ++i) {
-        cin >> claw;
+    for (int i = 0; i < n; ++i)
+        cin >> claws[i];
 
-        if (claw == 0)
-            dead[i] = dead[i - 1];
-        else if ((i - claw) > 0)
-            dead[i] = max(dead[i - claw] + claw, dead[i - 1] + 1);
-        else
-            dead[i] = i;
+    int x = n - 1 - claws[n - 1];
+    for (int i = n - 1; i >= 0; --i) {
+        if (i < x)
+            ++alive;
+        x = min(x, i - claws[i]);
     }
 
-    cout <<  (n - dead.back()) << endl;
+    cout << alive << endl;
 
     return 0;
 }
