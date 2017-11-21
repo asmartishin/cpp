@@ -3,9 +3,9 @@
 using namespace std;
 
 
-double binpow(double n, int p) {
+double binpow(double n, long long p) {
     double result = 1;
-    int abs_p = abs(p);
+    long long abs_p = abs(p);
 
     while (abs_p) {
         if (abs_p % 2 == 1)
@@ -20,7 +20,7 @@ double binpow(double n, int p) {
 
 int main() {
     double n;
-    int p;
+    long long p;
 
     cin >> n >> p;
 
