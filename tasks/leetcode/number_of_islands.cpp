@@ -12,7 +12,7 @@ struct TPairHash {
 };
 
 
-void bfs(vector<vector<char> > &grid, unordered_set<pair<int, int>, TPairHash > &nodes, pair<int, int> node, int n, int m) {
+void dfs(vector<vector<char> > &grid, unordered_set<pair<int, int>, TPairHash > &nodes, pair<int, int> node, int n, int m) {
     nodes.erase(node);
     vector<pair<int, int> > neighbours{{-1, 0} , {1, 0}, {0, -1}, {0, 1}};
 
@@ -25,7 +25,7 @@ void bfs(vector<vector<char> > &grid, unordered_set<pair<int, int>, TPairHash > 
         ) {
             pair<int, int> new_node = make_pair(n_first, n_second);
             if (nodes.find(new_node) != nodes.end())
-                bfs(grid, nodes, new_node, n, m);
+                dfs(grid, nodes, new_node, n, m);
         }
     }
 }
@@ -51,7 +51,7 @@ int numIslands(vector<vector<char> > &grid) {
 
     while (!nodes.empty()) {
         pair<int, int> node = *nodes.begin();
-        bfs(grid, nodes, node, n, m);
+        dfs(grid, nodes, node, n, m);
         ++result;
     }
 
