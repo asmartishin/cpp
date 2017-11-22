@@ -3,6 +3,72 @@
 using namespace std;
 
 
+struct ReferenceCounter {
+    size_t count;
+
+    ReferenceCounter()
+        : count(1) {}
+
+    size_t AddReference() {
+        return ++count;
+    }
+
+    size_t RemoveReference() {
+        return --count;
+    }
+};
+
+
+template <class T> class SmartPointer {
+protected:
+    void AddReference() {
+        ref_counter->AddReference();
+    }
+
+    void RemoveReference() {
+        if (ref_counter->RemoveReference() == 0) {
+            delete ref;
+            delete ref_counter;
+        }
+    }
+
+    T *ref;
+    ReferenceCounter* ref_counter;
+public:
+    SmartPointer(T *ptr) {
+        ref = ptr;
+        ref_counter = new ReferenceCounter();
+    }
+
+    SmartPointer(const SmartPointer<T> &other) {
+        *this = other;
+    }
+
+    T& operator*() {
+        return *ref;
+    }
+
+    T* operator->() {
+        return ref;
+    }
+
+    SmartPointer<T> & operator=(const SmartPointer<T> &other) {
+        if (this != &other) {
+            RemoveReference();
+
+            ref = other.ref;
+            ref_counter = other.ref_counter;
+            AddReference();
+        }
+        return *this;
+    }
+
+    ~SmartPointer() {
+        RemoveReference();
+    }
+};
+
+
 class Stack {
     struct Node {
         int data;
@@ -54,78 +120,12 @@ public:
 };
 
 
-template <class T> class SmartPointer {
-protected:
-    struct ReferenceCounter {
-        size_t count;
-
-        ReferenceCounter()
-            : count(1) {}
-
-        size_t AddReference() {
-            return ++count;
-        }
-
-        size_t RemoveReference() {
-            return --count;
-        }
-    };
-
-    void AddReference() {
-        ref_counter->AddReference();
-    }
-
-    void RemoveReference() {
-        if (ref_counter->RemoveReference() == 0) {
-            delete ref;
-            delete ref_counter;
-        }
-    }
-
-    T *ref;
-    ReferenceCounter* ref_counter;
-public:
-    SmartPointer(T *ptr) {
-        ref = ptr;
-        ref_counter = new ReferenceCounter();
-    }
-
-    SmartPointer(const SmartPointer<T> &other) {
-        *this = other;
-    }
-
-    T& operator*() {
-        return *ref;
-    }
-
-    T* operator->() {
-        return ref;
-    }
-
-    SmartPointer<T> & operator=(const SmartPointer<T> &other) {
-        if (this != &other) {
-            RemoveReference();
-
-            ref = other.ref;
-            ref_counter = other.ref_counter;
-            AddReference();
-        }
-        return *this;
-    }
-
-    ~SmartPointer() {
-        RemoveReference();
-    }
-};
-
-
 int main() {
     SmartPointer<Stack> s(new Stack());
-    SmartPointer<Stack> s1 = s;
 
-    s1->push(1);
-    s1->push(2);
-    s1->push(3);
+    s->push(1);
+    s->push(2);
+    s->push(3);
 
-    s1->print();
+    s->print();
 }
