@@ -99,11 +99,11 @@ private:
         }
     }
 
-    void inorder(vector<T> &nodes, Node *n) {
-        if (n != nullptr) {
-            inorder(nodes, n->left);
-            nodes.push_back(n->data);
-            inorder(nodes, n->right);
+    void print(Node *root) {
+        if (root != nullptr) {
+            print(root->left);
+            cout << root->data << ' ';
+            print(root->right);
         }
     }
 
@@ -146,13 +146,7 @@ public:
     }
 
     void print() {
-        vector<T> nodes;
-        inorder(nodes, root);
-
-        for (size_t i = 0; i < nodes.size(); ++i) {
-            cout << nodes[i] << ' ';
-        }
-
+        print(root);
         cout << endl;
     }
 };
