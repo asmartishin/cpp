@@ -1,25 +1,27 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 
 namespace NLinkedList {
     template<typename T>
     class LinkedList {
-    private:
-        struct Node {
-            std::unique_ptr<Node> Next;
+    public:
+        struct LinkedListNode {
+            std::unique_ptr<LinkedListNode> Next;
             T Data;
 
-            explicit Node(const T &data)
+            explicit LinkedListNode(const T &data)
                     : Data(data) {}
         };
 
         template <bool Const = true>
         class LinkedListIterator {
         private:
-            Node* NodePtr;
+            using NodeType = typename std::conditional<Const, const LinkedListNode, LinkedListNode>::type;
+            LinkedListNode* NodePtr;
         public:
-            explicit LinkedListIterator(Node* node)
+            explicit LinkedListIterator(LinkedListNode* node)
                 : NodePtr(node)
             {}
 
@@ -51,16 +53,15 @@ namespace NLinkedList {
                 return !(*this == other);
             }
 
-            typename std::conditional<Const, const T&, T&>::type operator*() const {
-                return NodePtr->Data;
+            NodeType& operator*() const {
+                return *NodePtr;
+            }
+
+            NodeType* operator->() const {
+                return NodePtr;
             }
         };
 
-        std::unique_ptr<Node> Head;
-        Node *Tail = nullptr;
-        std::size_t Size_ = 0;
-
-    public:
         using iterator = LinkedListIterator<false>;
         using const_iterator = LinkedListIterator<true>;
 
@@ -86,39 +87,85 @@ namespace NLinkedList {
         LinkedList(LinkedList&& other) noexcept
             : Head(std::move(other.Head))
         {
-            Tail = other.Tail;
-            other.Tail = nullptr;
             Size_ = other.Size_;
             other.Size_ = 0;
         }
 
         LinkedList& operator=(LinkedList&& other) noexcept {
-            if(this!=&other) {
+            if(this != &other) {
                 Head = std::move(other.Head);
-                other.Head = nullptr;
-                Tail = other.Tail;
-                other.Tail = nullptr;
                 Size_ = other.Size_;
                 other.Size_ = 0;
             }
             return *this;
         }
 
-        void PushBack(const T &data) {
-            if (Tail) {
-                Tail->Next = std::make_unique<Node>(data);
-                Tail = Tail->Next.get();
-            } else {
-                Head = std::make_unique<Node>(data);
-                Tail = Head.get();
+        const LinkedListNode& operator[](std::size_t position) const {
+            if (position > Size() - 1) {
+                throw std::out_of_range("");
             }
+
+            auto currentNode = GetHead();
+
+            for (size_t i = 0; i < position; ++i) {
+                currentNode = currentNode->Next.get();
+            }
+
+            return *currentNode;
+        }
+
+        LinkedListNode& operator[](std::size_t position) {
+            return const_cast<LinkedListNode&> (static_cast<const LinkedList&>(*this)[position]);
+        }
+
+        void PushBack(const T &data) {
+            auto currentNode = GetHead();
+
+            if (currentNode) {
+                while (currentNode->Next) {
+                    currentNode = currentNode->Next.get();
+                }
+                currentNode->Next = std::make_unique<LinkedListNode>(data);
+            } else {
+                Head = std::make_unique<LinkedListNode>(data);
+            }
+
             ++Size_;
+        }
+
+        void Erase(std::size_t position) {
+            auto& node = (*this)[position];
+
+            if (position == 0) {
+                Head = std::move(node.Next);
+            } else if (position == Size() - 1) {
+                PopBack();
+            } else {
+                node.Data = node.Next->Data;
+                node.Next = std::move(node.Next->Next);
+            }
+        }
+
+        void PopBack() {
+            auto currentNode = GetHead();
+
+            while (currentNode->Next->Next) {
+                currentNode = currentNode->Next.get();
+            }
+            currentNode->Next = nullptr;
+        }
+
+        LinkedListNode* GetHead() {
+            return Head.get();
+        }
+
+        const LinkedListNode* GetHead() const {
+            return Head.get();
         }
 
         friend void swap(LinkedList& lhs, LinkedList& rhs) {
             std::swap(lhs.Size_, rhs.Size_);
             std::swap(lhs.Head, rhs.Head);
-            std::swap(lhs.Tail, rhs.Tail);
         }
 
         iterator begin() {
@@ -126,7 +173,7 @@ namespace NLinkedList {
         }
 
         iterator end() {
-            return iterator(Tail->Next.get());
+            return iterator(nullptr);
         }
 
         const_iterator cbegin() const {
@@ -134,12 +181,15 @@ namespace NLinkedList {
         }
 
         const_iterator cend() const {
-            return const_iterator(Tail->Next.get());
+            return const_iterator(nullptr);
         }
 
-        size_t Size() const noexcept {
+        std::size_t Size() const noexcept {
             return Size_;
         }
+    private:
+        std::unique_ptr<LinkedListNode> Head;
+        std::size_t Size_ = 0;
     };
 }
 
