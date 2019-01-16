@@ -3,7 +3,6 @@
 
 using namespace std;
 
-
 class StringBuf {
 public:
     StringBuf(const char * data, size_t len)
@@ -27,7 +26,7 @@ private:
 int main() {
     char s[] = "tag1=asd;tag2=dsa";
 
-    StringBuf s1{s, 4};
+    StringBuf s1{"tag1=asd;tag2=dsa", 4};
     StringBuf s2{s + 9, 4};
 
     fprintf(stderr, "%.*s\n", (int)s1.Length(), s1.Data());
