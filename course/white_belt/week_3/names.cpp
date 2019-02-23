@@ -8,15 +8,29 @@ using namespace std;
 
 class Person {
 public:
+    Person(const string& firstName, const string& lastName, int birthday)
+     : Birthday(birthday)
+    {
+         FirstNames[Birthday] = firstName;
+         LastNames[Birthday] = lastName;
+    }
+
     void ChangeFirstName(int year, const string& first_name) {
-        FirstNames[year] = first_name;
+        if (year >= Birthday) {
+            FirstNames[year] = first_name;
+        }
     }
 
     void ChangeLastName(int year, const string& last_name) {
-        LastNames[year] = last_name;
+        if (year >= Birthday) {
+            LastNames[year] = last_name;
+        }
     }
 
-    string GetFullName(int year) {
+    string GetFullName(int year) const {
+        if (year < Birthday) {
+            return "No person";
+        }
         string firstName;
         string lastName;
 
@@ -45,7 +59,7 @@ public:
         return firstName + " " + lastName;
     }
 
-    string GetNamesHistory(const map<int, string>& names, int year) {
+    string GetNamesHistory(const map<int, string>& names, int year) const {
         vector<string> seenNames;
         map<int, string, std::greater<int>> namesHistory;
 
@@ -90,7 +104,10 @@ public:
         return result;
     }
 
-    string GetFullNameWithHistory(int year) {
+    string GetFullNameWithHistory(int year) const {
+        if (year < Birthday) {
+            return "No person";
+        }
         auto firstNameHistory = GetNamesHistory(FirstNames, year);
         auto lastNameHistory = GetNamesHistory(LastNames, year);
 
@@ -105,43 +122,22 @@ public:
         return firstNameHistory + " " + lastNameHistory;
     }
 private:
+    int Birthday;
     map<int, string> FirstNames;
     map<int, string> LastNames;
 };
 
 int main() {
-  Person person;
+    Person person("Polina", "Sergeeva", 1960);
+    for (int year : {1959, 1960}) {
+        cout << person.GetFullNameWithHistory(year) << endl;
+    }
 
-  person.ChangeFirstName(1965, "Polina");
-  person.ChangeLastName(1967, "Sergeeva");
-  for (int year : {1900, 1965, 1990}) {
-    cout << person.GetFullNameWithHistory(year) << endl;
-  }
-
-  person.ChangeFirstName(1970, "Appolinaria");
-  for (int year : {1969, 1970}) {
-    cout << person.GetFullNameWithHistory(year) << endl;
-  }
-
-  person.ChangeLastName(1968, "Volkova");
-  for (int year : {1969, 1970}) {
-    cout << person.GetFullNameWithHistory(year) << endl;
-  }
-
-  person.ChangeFirstName(1990, "Polina");
-  person.ChangeLastName(1990, "Volkova-Sergeeva");
-  cout << person.GetFullNameWithHistory(1990) << endl;
-
-  person.ChangeFirstName(1966, "Pauline");
-  cout << person.GetFullNameWithHistory(1966) << endl;
-
-  person.ChangeLastName(1960, "Sergeeva");
-  for (int year : {1960, 1967}) {
-    cout << person.GetFullNameWithHistory(year) << endl;
-  }
-
-  person.ChangeLastName(1961, "Ivanova");
-  cout << person.GetFullNameWithHistory(1967) << endl;
+    person.ChangeFirstName(1965, "Appolinaria");
+    person.ChangeLastName(1967, "Ivanova");
+    for (int year : {1965, 1967}) {
+        cout << person.GetFullNameWithHistory(year) << endl;
+    }
 
     return 0;
 }
