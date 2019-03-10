@@ -3,6 +3,8 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <exception>
+
 using namespace std;
 
 long long gcd(long long n, long long m) {
@@ -26,6 +28,10 @@ public:
     {}
 
     Rational(long long numerator, long long denominator) {
+        if (denominator == 0) {
+            throw invalid_argument("");
+        }
+
         bool isNegative = false;
         if (numerator * denominator < 0) {
             isNegative = true;
@@ -81,6 +87,9 @@ Rational operator*(const Rational& lhs, const Rational& rhs) {
 }
 
 Rational operator/(const Rational& lhs, const Rational& rhs) {
+    if (rhs.Numerator() == 0) {
+        throw domain_error("");
+    }
     return lhs * Rational(rhs.Denominator(), rhs.Numerator());
 }
 
@@ -91,15 +100,13 @@ ostream& operator<<(ostream& stream, const Rational& number) {
 
 istream& operator>>(istream& stream, Rational& number) {
     long long numerator, denominator;
+    char c;
 
-    if (stream.tellg() == -1) {
-        return stream;
+    stream >> numerator >> c >> denominator;
+
+    if (stream && c == '/') {
+        number = {numerator, denominator};
     }
-
-    stream >> numerator;
-    stream.ignore(1);
-    stream >> denominator;
-    number = {numerator, denominator};
 
     return stream;
 }
@@ -278,6 +285,20 @@ int main() {
             cout << "Wrong amount of items in the map" << endl;
             return 3;
         }
+    }
+
+    try {
+        Rational r(1, 0);
+        cout << "Doesn't throw in case of zero denominator" << endl;
+        return 1;
+    } catch (invalid_argument&) {
+    }
+
+    try {
+        auto x = Rational(1, 2) / Rational(0, 1);
+        cout << "Doesn't throw in case of division by zero" << endl;
+        return 2;
+    } catch (domain_error&) {
     }
 
     cout << "OK" << endl;
