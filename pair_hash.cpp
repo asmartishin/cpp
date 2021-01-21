@@ -3,14 +3,14 @@
 #include <functional>
 #include <string>
 
-//namespace std {
-//    template<>
-//    struct hash<std::pair<int, int> > {
-//        size_t operator()(const std::pair<int, int> &p) const {
-//            return std::hash<int>()(p.first) ^ std::hash<int>()(p.second);
-//        }
-//    };
-//}
+namespace std {
+    template<>
+    struct hash<std::pair<int, int> > {
+        size_t operator()(const std::pair<int, int> &p) const {
+            return std::hash<int>()(p.first) ^ std::hash<int>()(p.second);
+        }
+    };
+}
 
 struct TPairHash {
     template<typename T1, typename T2>
